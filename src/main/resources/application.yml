@@ -1,0 +1,46 @@
+server:
+  port: 33088
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/homework?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&failOverReadOnly=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: yirc99
+    password: zhu020929
+  threads:
+    virtual:
+      enabled: true
+logging:
+  config:
+    loggers:
+      com.baomidou.mybatisplus.core: DEBUG
+  level:
+    com.itheima: debug
+  pattern:
+    dateformat: HH:mm:ss
+#mybatis:
+#  mapper-locations: classpath*:mapper/*.xml #mapper.xml ????????
+#  configuration:
+#    map-underscore-to-camel-case: true # ???????????
+#    cache-enabled: false # ????????
+
+mybatis-plus:
+  interceptor:
+    - com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: false
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_uuid
+      update-strategy: not_null # ?????null???
+  #      logic-delete-value: 1 # ????????
+  #      logic-not-delete-value: 0  # ????????
+  #      logic-delete-field: isDelete  # ??????
+  mapper-locations: classpath*:mapper/**/*.xml #mapper.xml ????????
+  type-aliases-package: com.itheima.mp.domain.po
+#  type-aliases-super-type: ?????
+
