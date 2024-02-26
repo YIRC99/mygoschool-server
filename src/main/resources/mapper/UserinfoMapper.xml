@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yirc.mygoschool.mapper.UserinfoMapper">
+
+    <resultMap id="BaseResultMap" type="yirc.mygoschool.domain.Userinfo">
+            <id property="userid" column="userId" jdbcType="INTEGER"/>
+            <result property="username" column="userName" jdbcType="VARCHAR"/>
+            <result property="userwx" column="userWx" jdbcType="VARCHAR"/>
+            <result property="userphone" column="userPhone" jdbcType="VARCHAR"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="INTEGER"/>
+            <result property="reportnum" column="reportNum" jdbcType="INTEGER"/>
+            <result property="isstudent" column="isStudent" jdbcType="TINYINT"/>
+            <result property="isblack" column="isBlack" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        userId,userName,userWx,
+        userPhone,avatar,sex,
+        reportNum,isStudent,isBlack
+    </sql>
+</mapper>

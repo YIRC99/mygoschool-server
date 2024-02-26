@@ -4,7 +4,7 @@ spring:
   main:
     banner-mode: off
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/homework?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&failOverReadOnly=false
+    url: jdbc:mysql://127.0.0.1:3306/mygoschool?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&failOverReadOnly=false
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: yirc99
     password: zhu020929
