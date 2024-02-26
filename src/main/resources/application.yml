@@ -44,3 +44,5 @@ mybatis-plus:
   type-aliases-package: com.itheima.mp.domain.po
 #  type-aliases-super-type: ?????
 
+yirc99:
+  WxSecret: b8f93fdabc2c7dfbaea3c626c77438cd
