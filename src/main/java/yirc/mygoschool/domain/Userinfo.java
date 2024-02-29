@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
 /**
@@ -19,6 +21,9 @@ public class Userinfo implements Serializable {
      */
     @TableId(type = IdType.AUTO)
     private Integer userid;
+
+    @TableField(value = "openId")
+    private String openid;
 
     /**
      * 
@@ -59,6 +64,9 @@ public class Userinfo implements Serializable {
      * 是不是被封号了
      */
     private Integer isblack;
+
+    @TableField(value = "createAt")
+    private LocalDateTime createAt;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

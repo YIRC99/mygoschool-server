@@ -46,3 +46,4 @@ mybatis-plus:
 
 yirc99:
   WxSecret: b8f93fdabc2c7dfbaea3c626c77438cd
+  filePath: src/main/resources/static/avatar/
