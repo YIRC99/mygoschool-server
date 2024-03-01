@@ -39,7 +39,7 @@ public class UserinfoController {
     public Result login(@RequestParam String code){
         log.info("code:{}", code);
         // 发起get请求 获取微信一键登录需要的值
-        WxResult wxResult = WxLogin(code);
+        var wxResult = WxLogin(code);
         if (wxResult == null)
             return Result.error("一键登录失败");
         Userinfo user = userinfoService.getByOpenId(wxResult);

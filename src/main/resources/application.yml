@@ -25,24 +25,27 @@ logging:
 #    map-underscore-to-camel-case: true # ???????????
 #    cache-enabled: false # ????????
 
+# mybatis-plus配置文件
 mybatis-plus:
+  # 拦截器配置
   interceptor:
     - com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor
+  # 配置项
   configuration:
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    cache-enabled: false
+    map-underscore-to-camel-case: true # 将下划线转为驼峰命名
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志实现类
+    cache-enabled: false # 是否启用缓存
+  # 全局配置
   global-config:
-    banner: false
+    banner: false # 是否显示banner
     db-config:
-      id-type: assign_uuid
-      update-strategy: not_null # ?????null???
-  #      logic-delete-value: 1 # ????????
-  #      logic-not-delete-value: 0  # ????????
-  #      logic-delete-field: isDelete  # ??????
-  mapper-locations: classpath*:mapper/**/*.xml #mapper.xml ????????
-  type-aliases-package: com.itheima.mp.domain.po
-#  type-aliases-super-type: ?????
+      id-type: assign_uuid # 自动生成主键类型
+      update-strategy: not_null # 更新策略
+  # mapper配置
+  mapper-locations: classpath*:mapper/**/*.xml # mapper.xml文件路径
+  type-aliases-package: com.itheima.mp.domain.po # 类型别名包路径
+  # type-aliases-super-type: # 类型别名超类路径
+
 
 yirc99:
   WxSecret: b8f93fdabc2c7dfbaea3c626c77438cd

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yirc.mygoschool.mapper.CarshareorderMapper">
+
+    <resultMap id="BaseResultMap" type="yirc.mygoschool.domain.Carshareorder">
+            <id property="orderid" column="orderId" jdbcType="BIGINT"/>
+            <result property="createuserid" column="createUserId" jdbcType="BIGINT"/>
+            <result property="receiveuserid" column="receiveUserId" jdbcType="BIGINT"/>
+            <result property="startaddressall" column="startAddressAll" jdbcType="VARCHAR"/>
+            <result property="startaddress" column="startAddress" jdbcType="VARCHAR"/>
+            <result property="endaddressall" column="endAddressAll" jdbcType="VARCHAR"/>
+            <result property="endaddress" column="endAddress" jdbcType="VARCHAR"/>
+            <result property="startdatetime" column="startDateTime" jdbcType="TIMESTAMP"/>
+            <result property="currentperson" column="currentPerson" jdbcType="INTEGER"/>
+            <result property="lackperson" column="lackPerson" jdbcType="INTEGER"/>
+            <result property="phonenumber" column="phoneNumber" jdbcType="VARCHAR"/>
+            <result property="wechataccount" column="wechatAccount" jdbcType="VARCHAR"/>
+            <result property="receivedatetime" column="receiveDateTime" jdbcType="TIMESTAMP"/>
+            <result property="isbefore" column="isBefore" jdbcType="TINYINT"/>
+            <result property="beforetime" column="beforeTime" jdbcType="TIME"/>
+            <result property="isafter" column="isAfter" jdbcType="TINYINT"/>
+            <result property="aftertime" column="AfterTime" jdbcType="TIME"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="createat" column="createAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        orderId,createUserId,receiveUserId,
+        startAddressAll,startAddress,endAddressAll,
+        endAddress,startDateTime,currentPerson,
+        lackPerson,phoneNumber,wechatAccount,
+        receiveDateTime,isBefore,beforeTime,
+        isAfter,AfterTime,remark,
+        createAt
+    </sql>
+</mapper>
