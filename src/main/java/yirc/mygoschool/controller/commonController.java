@@ -32,6 +32,7 @@ public class commonController {
         // 在项目根目录下构建相对路径
         String relativePath = filePath; // 设置相对路径
         String resultPath = projectRootPath + File.separator + relativePath;
+        log.info("文件路径: {}",resultPath);
         //创建一个目录对象
         File dir1 = new File(resultPath);
         //判断目录是否存在

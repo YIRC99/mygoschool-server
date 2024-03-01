@@ -1,5 +1,6 @@
 package yirc.mygoschool.service;
 
+import yirc.mygoschool.common.WxResult;
 import yirc.mygoschool.domain.Userinfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,5 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserinfoService extends IService<Userinfo> {
 
-    Userinfo getByOpenId(String openid);
+    Userinfo getByOpenId(WxResult wxResult);
 }

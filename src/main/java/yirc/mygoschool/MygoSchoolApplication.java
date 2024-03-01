@@ -1,10 +1,15 @@
 package yirc.mygoschool;
 
+import jakarta.servlet.annotation.WebFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+
 @Slf4j
 @SpringBootApplication
+@WebFilter(filterName = "LoginFilter", urlPatterns = "/*")
+@ServletComponentScan(basePackages = {"yirc.mygoschool.filter"})
 public class MygoSchoolApplication {
 
     public static void main(String[] args) {

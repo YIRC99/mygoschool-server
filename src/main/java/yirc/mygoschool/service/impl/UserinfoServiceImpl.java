@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
+import yirc.mygoschool.common.WxResult;
 import yirc.mygoschool.domain.Userinfo;
 import yirc.mygoschool.service.UserinfoService;
 import yirc.mygoschool.mapper.UserinfoMapper;
@@ -24,15 +25,15 @@ public class UserinfoServiceImpl extends ServiceImpl<UserinfoMapper, Userinfo>
     private String filePath;
 
     @Override
-    public Userinfo getByOpenId(String openid) {
+    public Userinfo getByOpenId(WxResult wxResult) {
         LambdaQueryWrapper<Userinfo> query = new LambdaQueryWrapper<>();
-        query.eq(Userinfo::getOpenid, openid);
+        query.eq(Userinfo::getOpenid, wxResult.getOpenid());
         query.eq(Userinfo::getIsblack,0);
         Userinfo userinfo = this.getOne(query);
         if (userinfo == null){
             //第一次登录的话 随机生成一个头像和名称
             Userinfo newUser = new Userinfo();
-            newUser.setOpenid(openid);
+            newUser.setOpenid(wxResult.getOpenid());
             newUser.setUsername("微信用户"+ UUID.randomUUID().toString().substring(0,3));
             newUser.setAvatar("1"+".jpg");
             newUser.setSex(1);

@@ -42,8 +42,8 @@ public class UserinfoController {
         WxResult wxResult = WxLogin(code);
         if (wxResult == null)
             return Result.error("一键登录失败");
-        Userinfo user = userinfoService.getByOpenId(wxResult.getOpenid());
-        log.warn("wxResult:{}", wxResult.toString());
+        Userinfo user = userinfoService.getByOpenId(wxResult);
+        log.warn("wxResult:{}", wxResult);
         return Result.success(user);
     }
 
