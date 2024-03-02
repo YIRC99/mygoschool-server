@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* @author 一见如初
-* @description 针对表【carshareorder(拼车订单表)】的数据库操作Service实现
-* @createDate 2024-03-01 15:19:17
-*/
+ * @author 一见如初
+ * @description 针对表【carshareorder(拼车订单表)】的数据库操作Service实现
+ * @createDate 2024-03-01 15:19:17
+ */
 @Service
 public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, Carshareorder>
-    implements CarshareorderService{
+        implements CarshareorderService {
 
     @Autowired
     private UserinfoService userinfoService;
@@ -38,19 +38,19 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
     public boolean isSavePhoneOrWeChat(Carshareorder order) {
         if (order.getPhonenumber() == null && order.getWechataccount() == null)
             return false;
-        if (order.getPhonenumber() != null){
+        if (order.getPhonenumber() != null) {
             LambdaUpdateWrapper<Userinfo> query = new LambdaUpdateWrapper<>();
-            query.eq(Userinfo::getOpenid,order.getCreateuserid())
-                    .set(Userinfo::getUserphone,order.getPhonenumber())
+            query.eq(Userinfo::getOpenid, order.getCreateuserid())
+                    .set(Userinfo::getUserphone, order.getPhonenumber())
                     .isNull(Userinfo::getUserphone);
             userinfoService.update(query);
         }
         // 同样的对微信号也做同样的处理
-        if (order.getWechataccount() != null){
+        if (order.getWechataccount() != null) {
             LambdaUpdateWrapper<Userinfo> query = new LambdaUpdateWrapper<>();
-            query.eq(Userinfo::getOpenid,order.getCreateuserid())
-                    .set(Userinfo::getUserwx,order.getWechataccount())
-                    .isNull(Userinfo::getUserwx);
+            query.eq(Userinfo::getOpenid, order.getCreateuserid())
+                    .set(Userinfo::getUserwx, order.getWechataccount())
+                    .and(i -> i.isNull(Userinfo::getUserwx).or().eq(Userinfo::getUserwx, ""));
             userinfoService.update(query);
         }
         return true;
@@ -58,21 +58,22 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
 
     @Override
     public Page<CarshareorderDto> listByPage(PageInfo pageInfo) {
-        Page<CarshareorderDto> pageDto = new Page<>(pageInfo.getPageNum(),pageInfo.getPageSize());
+        Page<CarshareorderDto> pageDto = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
 
-        Page<Carshareorder> page = new Page<>(pageInfo.getPageNum(),pageInfo.getPageSize());
+        Page<Carshareorder> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
         LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Carshareorder::getIsDelete,0);
+        wrapper.eq(Carshareorder::getIsDelete, 0);
         // 根据传入的地址 获取不同的地址拼车信息
-        if(pageInfo.getStartAddName() != null)
-            if(!"其他".equals(pageInfo.getStartAddName()))
-                wrapper.like(Carshareorder::getStartaddressall,pageInfo.getStartAddName());
-            else{
-                wrapper.notLike(Carshareorder::getStartaddressall,"濂溪校区");
-                wrapper.notLike(Carshareorder::getStartaddressall,"鹤问湖校区");
+        if (pageInfo.getStartAddName() != null)
+            if (!"其他".equals(pageInfo.getStartAddName())) {
+                // 新校区不仅 濂溪校区一个关键词 可能出现 还有  九江职业大学新校区
+                wrapper.like(Carshareorder::getStartaddressall, pageInfo.getStartAddName());
+            } else {
+                wrapper.notLike(Carshareorder::getStartaddressall, "濂溪校区");
+                wrapper.notLike(Carshareorder::getStartaddressall, "鹤问湖校区");
             }
 
-        wrapper.orderByDesc(Carshareorder::getCreateat);
+        wrapper.orderByDesc(Carshareorder::getStartdatetime);
         //如果有传入日期 那就构建边界 进行日期范围查询
         if (pageInfo.getPageDate() != null) {
             LocalDate targetDate = pageInfo.getPageDate();
@@ -97,7 +98,7 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
         pageinfo.getRecords().forEach(item -> {
             CarshareorderDto Dto = new CarshareorderDto();
             LambdaQueryWrapper<Userinfo> userWrapper = new LambdaQueryWrapper<>();
-            userWrapper.eq(Userinfo::getOpenid,item.getCreateuserid());
+            userWrapper.eq(Userinfo::getOpenid, item.getCreateuserid());
             Userinfo userinfo = userinfoService.getOne(userWrapper);
             BeanUtils.copyProperties(item, Dto);
             Dto.setCreateUserInfo(userinfo);

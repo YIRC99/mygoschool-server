@@ -3,6 +3,7 @@ package yirc.mygoschool.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.CarshareorderDto;
 import yirc.mygoschool.common.Result;

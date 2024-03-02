@@ -4,10 +4,10 @@ spring:
   main:
     banner-mode: off
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/mygoschool?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&failOverReadOnly=false
+    url: ENC(Qyli4hKrqFUV1lnl7868PXnRc54W7f53MlqgLJR2DrFJNf6GBdvkPQfdHl6tpeQ89eEVpO1uif9SGDFK5lig4TeyaXT8FPMeYXO+nNj3x7xKK8SAgaut+iVsnoPBhz1ARGMC3OwgaJRA0ADKYLoHuXTDbV36KINUnwq3/x63z9kd25JNhD/h4qCa7kI0s7Qpb376gIHO38QMI7JM8b6lFEE4Bt95pzKepwiGSXwQ7+wzjGtx6/XrGYRh9Hfeqb3cqxfMGAi1GeZ/vdKgS1cVG7TjhXuUkP2n6fRpPrFIGSb3jwIeO/OcfCAc/ORiD6fp)
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: yirc99
-    password: zhu020929
+    username: ENC(hsbT3itK+X/yMGB9Gt/xcg==)
+    password: ENC(K7EE3efZSpVfMOMN0eKpjVmkW6Ogx286)
   threads:
     virtual:
       enabled: true
@@ -46,7 +46,6 @@ mybatis-plus:
   type-aliases-package: com.itheima.mp.domain.po # 类型别名包路径
   # type-aliases-super-type: # 类型别名超类路径
 
-
 yirc99:
-  WxSecret: b8f93fdabc2c7dfbaea3c626c77438cd
+  WxSecret: ENC(sjHa4toKczeyage0OZzdm2QFwk47NUC0amAZMkiNLoqagejveDORfSIO58PfpGAo)
   filePath: /src/main/resources/static/avatar/

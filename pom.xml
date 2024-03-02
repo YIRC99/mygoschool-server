@@ -65,6 +65,13 @@
             <version>1.2.76</version>
         </dependency>
 
+        <!-- 配置文件内容加密-->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+
 
 
 
