@@ -117,6 +117,9 @@ public class Carshareorder implements Serializable {
      */
     private LocalDateTime createat;
 
+    @TableField(value = "isDelete")
+    private Integer isDelete;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

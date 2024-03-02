@@ -1,14 +1,17 @@
 package yirc.mygoschool.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import yirc.mygoschool.Dto.CarshareorderDto;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Carshareorder;
+import yirc.mygoschool.domain.PageInfo;
+import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.CarshareorderService;
+
+import java.util.List;
 
 /**
  * @Version v1.0
@@ -34,6 +37,19 @@ public class CarShareOrderController {
             return Result.success(carshareorder);
         return Result.error("添加失败");
     }
+
+    @PostMapping("/page")
+    public Result list(@RequestBody PageInfo pageInfo) {
+        log.error("分页查询的参数为: {} {} {} {}",pageInfo.getPageNum(),pageInfo.getPageSize(),pageInfo.getPageDate(),pageInfo.getStartAddName());
+        if(pageInfo.getPageNum() == null || pageInfo.getPageNum() < 1
+                || pageInfo.getPageSize() == null || pageInfo.getPageSize() < 1){
+            throw new CustomException("分页参数错误");
+        }
+        //分页查询全部拼车 附带筛选
+        Page<CarshareorderDto> orderDtos = carshareorderService.listByPage(pageInfo);
+        return Result.success(orderDtos);
+    }
+
 
 
 }

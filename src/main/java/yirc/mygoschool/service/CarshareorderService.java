@@ -1,7 +1,12 @@
 package yirc.mygoschool.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import yirc.mygoschool.Dto.CarshareorderDto;
 import yirc.mygoschool.domain.Carshareorder;
 import com.baomidou.mybatisplus.extension.service.IService;
+import yirc.mygoschool.domain.PageInfo;
+
+import java.util.List;
 
 /**
 * @author 一见如初
@@ -11,4 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface CarshareorderService extends IService<Carshareorder> {
 
     boolean isSavePhoneOrWeChat(Carshareorder carshareorder);
+
+    Page<CarshareorderDto> listByPage(PageInfo pageInfo);
 }
