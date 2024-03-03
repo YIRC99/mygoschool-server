@@ -39,7 +39,7 @@ mybatis-plus:
   global-config:
     banner: false # 是否显示banner
     db-config:
-      id-type: assign_uuid # 自动生成主键类型
+      id-type: ASSIGN_ID # 自动生成主键类型
       update-strategy: not_null # 更新策略
   # mapper配置
   mapper-locations: classpath*:mapper/**/*.xml # mapper.xml文件路径
@@ -49,3 +49,4 @@ mybatis-plus:
 yirc99:
   WxSecret: ENC(sjHa4toKczeyage0OZzdm2QFwk47NUC0amAZMkiNLoqagejveDORfSIO58PfpGAo)
   filePath: /src/main/resources/static/avatar/
+  feedbackImgPath: /src/main/resources/static/feedback/

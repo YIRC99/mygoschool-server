@@ -20,7 +20,7 @@ public class Userinfo implements Serializable {
      * 
      */
     @TableId(type = IdType.AUTO)
-    private Integer userid;
+    private String userid;
 
     @TableField(value = "openId")
     private String openid;

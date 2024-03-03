@@ -2,6 +2,7 @@ package yirc.mygoschool.controller;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -45,6 +46,13 @@ public class UserinfoController {
         Userinfo user = userinfoService.getByOpenId(wxResult);
         log.warn("wxResult:{}", wxResult);
         return Result.success(user);
+    }
+
+    @PostMapping("/update")
+    public Result update(@RequestBody Userinfo user){
+        log.info("传入的需要修改的数据为: {}", user);
+        userinfoService.updateById(user);
+        return Result.success("success");
     }
 
     private WxResult WxLogin(String code){
