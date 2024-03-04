@@ -1,6 +1,7 @@
 package yirc.mygoschool.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -63,6 +64,7 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
         Page<Carshareorder> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
         LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Carshareorder::getIsDelete, 0);
+        wrapper.isNull(Carshareorder::getReceiveuserid);
         // 根据传入的地址 获取不同的地址拼车信息
         if (pageInfo.getStartAddName() != null)
             if (!"其他".equals(pageInfo.getStartAddName())) {
@@ -81,7 +83,7 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
                 wrapper.notLike(Carshareorder::getStartaddressall, "鹤问湖校区");
             }
 
-        wrapper.orderByDesc(Carshareorder::getStartdatetime);
+        wrapper.orderByDesc(Carshareorder::getCreateat);
         //如果有传入日期 那就构建边界 进行日期范围查询
         if (pageInfo.getPageDate() != null) {
             LocalDate targetDate = pageInfo.getPageDate();
@@ -114,6 +116,13 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
         });
         pageDto.setRecords(ResultList);
         return pageDto;
+    }
+
+    @Override
+    public Carshareorder selectForUpdate(Long orderId) {
+        LambdaQueryWrapper<Carshareorder> w = new LambdaQueryWrapper<>();
+        w.eq(Carshareorder::getOrderid, orderId).last("for update");
+        return this.getOne(w);
     }
 }
 

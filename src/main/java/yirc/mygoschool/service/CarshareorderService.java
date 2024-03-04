@@ -18,4 +18,7 @@ public interface CarshareorderService extends IService<Carshareorder> {
     boolean isSavePhoneOrWeChat(Carshareorder carshareorder);
 
     Page<CarshareorderDto> listByPage(PageInfo pageInfo);
+
+
+    Carshareorder selectForUpdate(Long orderid);
 }
