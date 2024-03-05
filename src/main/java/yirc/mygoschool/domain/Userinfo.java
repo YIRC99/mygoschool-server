@@ -35,6 +35,9 @@ public class Userinfo implements Serializable {
      */
     private String userwx;
 
+    @TableField(value = "userWxImg")
+    private String userWxImg;
+
     /**
      * 
      */

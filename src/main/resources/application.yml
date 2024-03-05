@@ -48,7 +48,7 @@ mybatis-plus:
 
 yirc99:
   WxSecret: ENC(sjHa4toKczeyage0OZzdm2QFwk47NUC0amAZMkiNLoqagejveDORfSIO58PfpGAo)
-  filePath: /src/main/resources/static/avatar/
+  filePath: /src/main/resources/static/
   feedbackImgPath: /src/main/resources/static/feedback/
   Template:
     id: R0HVPNJRywpmvaA5xO6YWFfjLdGqcjWPB0-rqRkmkbk

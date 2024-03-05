@@ -80,6 +80,9 @@ public class Carshareorder implements Serializable {
      */
     private String wechataccount;
 
+    @TableField(value = "wechatImg")
+    private String wechatImg;
+
     /**
      * 订单接受时间
      */
