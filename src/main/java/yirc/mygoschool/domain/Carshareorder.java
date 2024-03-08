@@ -35,6 +35,9 @@ public class Carshareorder implements Serializable {
      */
     private String receiveuserid;
 
+    @TableField(value = "receiveUserWechatImg")
+    private String receiveUserWechatImg;
+
     /**
      * 出发地点全称
      */
@@ -122,6 +125,9 @@ public class Carshareorder implements Serializable {
 
     @TableField(value = "isDelete")
     private Integer isDelete;
+
+    @TableField(value = "status")
+    private Integer status;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

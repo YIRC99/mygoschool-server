@@ -17,4 +17,5 @@ import java.time.LocalTime;
 @Data
 public class CarshareorderDto extends Carshareorder {
     private Userinfo createUserInfo;
+    private Userinfo receiveUserInfo;
 }

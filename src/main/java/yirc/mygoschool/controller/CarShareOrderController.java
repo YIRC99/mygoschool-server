@@ -2,6 +2,7 @@ package yirc.mygoschool.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.message.Message;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.TransactionDefinition;
@@ -20,15 +22,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.CarshareorderDto;
+import yirc.mygoschool.anno.OrderOverdue;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.config.AccessTokenService;
 import yirc.mygoschool.domain.*;
 import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.CarshareorderService;
+import yirc.mygoschool.service.UserinfoService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,6 +52,9 @@ public class CarShareOrderController {
 
     @Value("${yirc99.Template.id}")
     private String TemplateId;
+
+    @Autowired
+    private UserinfoService userinfoService;
 
     @Autowired
     private CarshareorderService carshareorderService;
@@ -94,6 +102,8 @@ public class CarShareOrderController {
 
         // 更新订单
         lockedOrder.setReceiveuserid(order.getReceiveuserid());
+        lockedOrder.setReceiveUserWechatImg(order.getReceiveUserWechatImg());
+        lockedOrder.setStatus(1);
         boolean b = carshareorderService.updateById(lockedOrder);
         // 跟新成功了 才发送消息
         if(b){
@@ -101,6 +111,35 @@ public class CarShareOrderController {
         }
         return Result.success("订单接受成功。");
     }
+
+    @PostMapping("/getbyid")
+    @OrderOverdue
+    public Result getById(@RequestBody Userinfo user){
+        log.info("根据id获取用户拼车订单: {}", user);
+        LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Carshareorder::getIsDelete,0)
+                .eq(Carshareorder::getCreateuserid,user.getOpenid());
+        List<Carshareorder> orders = carshareorderService.list(wrapper);
+        List<CarshareorderDto> orderDto = new ArrayList<>();
+
+        for (Carshareorder order : orders) {
+            CarshareorderDto dto = new CarshareorderDto();
+            BeanUtils.copyProperties(order, dto); // 拷贝基本属性
+            if (order.getStatus() != 0) {
+                LambdaQueryWrapper<Userinfo> query = new LambdaQueryWrapper<>();
+                query.eq(Userinfo::getOpenid, order.getReceiveuserid());
+                Userinfo receiveUser = userinfoService.getOne(query);
+                // 拷贝其他属性
+                dto.setReceiveUserInfo(receiveUser); // 假设有一个方法将接收用户设置到 DTO 中
+            }
+            orderDto.add(dto); // 将 DTO 添加到列表中
+        }
+
+
+
+        return Result.success(orderDto);
+    }
+
 
     private void sendUserMeg(String openid) throws IOException {
         // 创建HttpClient实例

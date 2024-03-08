@@ -63,10 +63,14 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
 
         Page<Carshareorder> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
         LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
+        // 公共条件 没有删除 没有人接受 没有超时 开始时间降序
         wrapper.eq(Carshareorder::getIsDelete, 0);
         wrapper.isNull(Carshareorder::getReceiveuserid);
+        wrapper.gt(Carshareorder::getStartdatetime, LocalDateTime.now());
+        wrapper.orderByDesc(Carshareorder::getStartdatetime);
+
         // 根据传入的地址 获取不同的地址拼车信息
-        if (pageInfo.getStartAddName() != null)
+        if (pageInfo.getStartAddName() != null) {
             if (!"其他".equals(pageInfo.getStartAddName())) {
                 // 新校区不仅濂溪校区一个关键词 可能出现 还有  九江职业大学新校区
                 if ("濂溪校区".equals(pageInfo.getStartAddName())) {
@@ -82,8 +86,8 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
                 wrapper.notLike(Carshareorder::getStartaddressall, "九江职业大学新校区");
                 wrapper.notLike(Carshareorder::getStartaddressall, "鹤问湖校区");
             }
+        }
 
-        wrapper.orderByDesc(Carshareorder::getCreateat);
         //如果有传入日期 那就构建边界 进行日期范围查询
         if (pageInfo.getPageDate() != null) {
             LocalDate targetDate = pageInfo.getPageDate();
@@ -103,7 +107,6 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
         Page<Carshareorder> pageinfo = this.page(page, wrapper);
         BeanUtils.copyProperties(pageinfo, pageDto);
         List<CarshareorderDto> ResultList = new ArrayList<>();
-
 
         pageinfo.getRecords().forEach(item -> {
             CarshareorderDto Dto = new CarshareorderDto();
