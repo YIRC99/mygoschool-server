@@ -5,6 +5,7 @@ import yirc.mygoschool.Dto.CarshareorderDto;
 import yirc.mygoschool.domain.Carshareorder;
 import com.baomidou.mybatisplus.extension.service.IService;
 import yirc.mygoschool.domain.PageInfo;
+import yirc.mygoschool.domain.Userinfo;
 
 import java.util.List;
 
@@ -21,4 +22,8 @@ public interface CarshareorderService extends IService<Carshareorder> {
 
 
     Carshareorder selectForUpdate(Long orderid);
+
+    List<CarshareorderDto> getReceiveByUserId(Userinfo user);
+
+    List<CarshareorderDto> getUpOrderByUserId(Userinfo user);
 }

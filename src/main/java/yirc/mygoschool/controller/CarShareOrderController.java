@@ -112,33 +112,21 @@ public class CarShareOrderController {
         return Result.success("订单接受成功。");
     }
 
+    @PostMapping("/getreceivebyuserid")
+    public Result getReceiveByUserId(@RequestBody Userinfo user){
+        log.info("根据用户id获取用户接受的拼车订单: {}", user);
+        // 查询自己接受的订单 顺便带上创建用户的信息
+        List<CarshareorderDto> orders = carshareorderService.getReceiveByUserId(user);
+        return Result.success(orders);
+    }
+
     @PostMapping("/getbyuserid")
     @OrderOverdue
     public Result getByUserId(@RequestBody Userinfo user){
         log.info("根据id获取用户拼车订单: {}", user);
-        LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Carshareorder::getIsDelete,0)
-                .eq(Carshareorder::getCreateuserid,user.getOpenid())
-                .orderByDesc(Carshareorder::getCreateat);
-        List<Carshareorder> orders = carshareorderService.list(wrapper);
-        List<CarshareorderDto> orderDto = new ArrayList<>();
-
-        for (Carshareorder order : orders) {
-            CarshareorderDto dto = new CarshareorderDto();
-            BeanUtils.copyProperties(order, dto); // 拷贝基本属性
-            if (order.getStatus() != 0) {
-                LambdaQueryWrapper<Userinfo> query = new LambdaQueryWrapper<>();
-                query.eq(Userinfo::getOpenid, order.getReceiveuserid());
-                Userinfo receiveUser = userinfoService.getOne(query);
-                // 拷贝其他属性
-                dto.setReceiveUserInfo(receiveUser); // 假设有一个方法将接收用户设置到 DTO 中
-            }
-            orderDto.add(dto); // 将 DTO 添加到列表中
-        }
-
-
-
-        return Result.success(orderDto);
+        // 获取用户发布的拼车 如果有人接受了 就附带上接受用户的信息
+        List<CarshareorderDto> results = carshareorderService.getUpOrderByUserId(user);
+        return Result.success(results);
     }
 
     @PostMapping("/getbyorderid")
@@ -146,8 +134,6 @@ public class CarShareOrderController {
         Carshareorder byId = carshareorderService.getById(order);
         return Result.success(byId);
     }
-
-
 
 
     @PostMapping("/update")
@@ -210,8 +196,10 @@ public class CarShareOrderController {
                 String responseBody = EntityUtils.toString(responseEntity, "UTF-8");
                 JSONObject object = JSON.parseObject(responseBody);
                 String errmsg = object.getString("errmsg");
-                if(!"ok".equals(errmsg)) throw new CustomException("发送消息模板失败 失败代码为: "+ object.getString("errcode"));
-                else log.info("发送消息模板成功");
+                if(!"ok".equals(errmsg)) {
+                    log.error("发送消息模板失败 失败代码为: "+ object.getString("errcode"));
+                } else log.info("发送消息模板成功");
+
             }
         }
     }

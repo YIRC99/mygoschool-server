@@ -124,9 +124,53 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
     @Override
     public Carshareorder selectForUpdate(Long orderId) {
         LambdaQueryWrapper<Carshareorder> w = new LambdaQueryWrapper<>();
-        w.eq(Carshareorder::getIsDelete,0);
+        w.eq(Carshareorder::getIsDelete, 0);
         w.eq(Carshareorder::getOrderid, orderId).last("for update");
         return this.getOne(w);
+    }
+
+    @Override
+    public List<CarshareorderDto> getReceiveByUserId(Userinfo user) {
+        LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
+        List<CarshareorderDto> ResultList = new ArrayList<>();
+        wrapper.eq(Carshareorder::getIsDelete, 0)
+                .eq(Carshareorder::getReceiveuserid, user.getOpenid())
+                .orderByDesc(Carshareorder::getCreateat);
+        List<Carshareorder> orders = this.list(wrapper);
+        orders.forEach(item -> {
+            CarshareorderDto Dto = new CarshareorderDto();
+            BeanUtils.copyProperties(item, Dto);
+            LambdaQueryWrapper<Userinfo> w = new LambdaQueryWrapper<>();
+            w.eq(Userinfo::getOpenid, item.getCreateuserid());
+            Userinfo one = userinfoService.getOne(w);
+            Dto.setCreateUserInfo(one);
+            ResultList.add(Dto);
+        });
+        return ResultList;
+    }
+
+    @Override
+    public List<CarshareorderDto> getUpOrderByUserId(Userinfo user) {
+        LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Carshareorder::getIsDelete,0)
+                .eq(Carshareorder::getCreateuserid,user.getOpenid())
+                .orderByDesc(Carshareorder::getCreateat);
+        List<Carshareorder> orders = this.list(wrapper);
+        List<CarshareorderDto> orderDto = new ArrayList<>();
+
+        for (Carshareorder order : orders) {
+            CarshareorderDto dto = new CarshareorderDto();
+            BeanUtils.copyProperties(order, dto); // 拷贝基本属性
+            if (order.getStatus() != 0) {
+                LambdaQueryWrapper<Userinfo> query = new LambdaQueryWrapper<>();
+                query.eq(Userinfo::getOpenid, order.getReceiveuserid());
+                Userinfo receiveUser = userinfoService.getOne(query);
+                // 拷贝其他属性
+                dto.setReceiveUserInfo(receiveUser); // 假设有一个方法将接收用户设置到 DTO 中
+            }
+            orderDto.add(dto); // 将 DTO 添加到列表中
+        }
+        return orderDto;
     }
 }
 
