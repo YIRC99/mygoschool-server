@@ -124,6 +124,7 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
     @Override
     public Carshareorder selectForUpdate(Long orderId) {
         LambdaQueryWrapper<Carshareorder> w = new LambdaQueryWrapper<>();
+        w.eq(Carshareorder::getIsDelete,0);
         w.eq(Carshareorder::getOrderid, orderId).last("for update");
         return this.getOne(w);
     }

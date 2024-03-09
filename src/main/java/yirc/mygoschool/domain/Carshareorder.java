@@ -123,6 +123,9 @@ public class Carshareorder implements Serializable {
      */
     private LocalDateTime createat;
 
+    @TableField(value = "updateAt")
+    private LocalDateTime updateAt;
+
     @TableField(value = "isDelete")
     private Integer isDelete;
 

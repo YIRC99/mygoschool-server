@@ -97,7 +97,7 @@ public class CarShareOrderController {
 
         // 检查订单是否已经被接受
         if (lockedOrder.getReceiveuserid() != null) {
-            return Result.error("订单已经被接受。");
+            return Result.error("订单已经被接受或删除");
         }
 
         // 更新订单
@@ -112,13 +112,14 @@ public class CarShareOrderController {
         return Result.success("订单接受成功。");
     }
 
-    @PostMapping("/getbyid")
+    @PostMapping("/getbyuserid")
     @OrderOverdue
-    public Result getById(@RequestBody Userinfo user){
+    public Result getByUserId(@RequestBody Userinfo user){
         log.info("根据id获取用户拼车订单: {}", user);
         LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Carshareorder::getIsDelete,0)
-                .eq(Carshareorder::getCreateuserid,user.getOpenid());
+                .eq(Carshareorder::getCreateuserid,user.getOpenid())
+                .orderByDesc(Carshareorder::getCreateat);
         List<Carshareorder> orders = carshareorderService.list(wrapper);
         List<CarshareorderDto> orderDto = new ArrayList<>();
 
@@ -138,6 +139,35 @@ public class CarShareOrderController {
 
 
         return Result.success(orderDto);
+    }
+
+    @PostMapping("/getbyorderid")
+    public Result getByOrderIdd(@RequestBody Carshareorder order){
+        Carshareorder byId = carshareorderService.getById(order);
+        return Result.success(byId);
+    }
+
+
+
+
+    @PostMapping("/update")
+    public Result update(@RequestBody Carshareorder order) {
+        order.setUpdateAt(LocalDateTime.now());
+        carshareorderService.updateById(order);
+        return Result.success("修改成功");
+    }
+
+    @PostMapping("/delete")
+    public Result deleteById(@RequestBody Carshareorder order){
+        LambdaUpdateWrapper<Carshareorder> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Carshareorder::getIsDelete,0)
+                .eq(Carshareorder::getOrderid,order.getOrderid())
+                .set(Carshareorder::getIsDelete,1);
+        boolean update = carshareorderService.update(wrapper);
+        if (!update){
+            return Result.error("删除失败");
+        }
+        return Result.success("删除成功");
     }
 
 
