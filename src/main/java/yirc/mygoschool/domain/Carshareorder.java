@@ -118,6 +118,14 @@ public class Carshareorder implements Serializable {
      */
     private String remark;
 
+    //创建订单的用户对订单的评价id
+    @TableField(value = "createUserAppriseId")
+    private Long createUserAppriseId;
+
+    //接受订单用户对订单的评价Id
+    @TableField(value = "receiveUserAppriseId")
+    private Long receiveUserAppriseId;
+
     /**
      * 
      */

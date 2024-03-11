@@ -36,6 +36,11 @@ public class UserinfoController {
     @Value("${yirc99.WxSecret}")
     private String AppSecret;
 
+    @PostMapping("/byuserid")
+    public Result getByUserId(@RequestBody Userinfo user){
+        Userinfo userinfo = userinfoService.getById(user);
+        return Result.success(userinfo);
+    }
     @PostMapping("/login")
     public Result login(@RequestParam String code){
         log.info("code:{}", code);

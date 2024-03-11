@@ -168,8 +168,8 @@ public class CarShareOrderController {
         String template_id = TemplateId;
         //订阅消息内容组装
         SubscribeDataBean bean = new SubscribeDataBean();
-        bean.setThing1(new SubscribeDataBean.Thing1("拼车订单已被接受"));
-        bean.setThing2(new SubscribeDataBean.Thing2("对方微信:YIRC99"));
+        bean.setThing1(new SubscribeDataBean.Thing1("mygoSchool"));
+        bean.setThing2(new SubscribeDataBean.Thing2("您发布的拼车已被接受"));
         LocalDateTime now = LocalDateTime.now();
         String format = now.format(DateTimeFormatter.ofPattern("yyyy年M月d日 HH:mm"));
         bean.setTime3(new SubscribeDataBean.Time3(format));
