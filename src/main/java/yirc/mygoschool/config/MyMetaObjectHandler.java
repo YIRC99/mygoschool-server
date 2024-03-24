@@ -15,6 +15,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
+        // mybatis plus 自动填充配置类 但是不需要使用
 //        log.info("公共字段插入自动填充");
 //        metaObject.setValue("createdAt", LocalDateTime.now());
 //        metaObject.setValue("createdAt", LocalDateTime.now());

@@ -77,7 +77,12 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-
+<!--        敏感词-->
+        <dependency>
+            <groupId>com.github.houbb</groupId>
+            <artifactId>sensitive-word</artifactId>
+            <version>0.13.1</version>
+        </dependency>
 
 
         <!--        jwt令牌-->

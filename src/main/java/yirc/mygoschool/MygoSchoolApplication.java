@@ -1,5 +1,6 @@
 package yirc.mygoschool;
 
+import com.github.houbb.sensitive.word.core.SensitiveWordHelper;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import jakarta.servlet.annotation.WebFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class MygoSchoolApplication {
     public static void main(String[] args) {
+
         SpringApplication.run(MygoSchoolApplication.class, args);
         System.out.println(" __   __   ___    ____      ____     ___    ___      ");
         System.out.println(" \\ \\ / /  |_ _|  |  _ \\   / ___|   / _ \\   / _ \\   ");

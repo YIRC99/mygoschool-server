@@ -156,7 +156,6 @@ public class CarShareOrderController {
         return Result.success("删除成功");
     }
 
-
     private void sendUserMeg(String openid) throws IOException {
         // 创建HttpClient实例
         CloseableHttpClient httpClient = HttpClients.createDefault();

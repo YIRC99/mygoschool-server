@@ -1,28 +1,38 @@
 package yirc.mygoschool.controller;
 
+import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
+import com.github.houbb.sensitive.word.core.SensitiveWordHelper;
+import jakarta.annotation.Resource;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yirc.mygoschool.common.Result;
+import yirc.mygoschool.config.SensitiveWordConfig;
+import yirc.mygoschool.sensitiveWord.SensitiveWordService;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @Slf4j
 @RequestMapping("/common")
-public class commonController {
+public class CommonController {
 
     @Value("${yirc99.filePath}")
     private String filePath;
 
-    @Value("${yirc99.feedbackImgPath}")
-    private String feedbackImgPath;
+    @Autowired
+    private SensitiveWordBs sensitiveWordBs;
+
+    @Autowired
+    private SensitiveWordService sensitiveWordService;
+
 
     // 下载图片
     @GetMapping("/download")
@@ -124,6 +134,21 @@ public class commonController {
         }
 
         return Result.success(uuid + filename);
+    }
+
+
+    @PostMapping("/testWord")
+    public Result TestWord(@RequestBody Map<String, String> requestBody){
+        String test = requestBody.get("test");
+
+        List<String> all2 = SensitiveWordHelper.findAll(test);
+        List<String> all1 = sensitiveWordBs.findAll(test);
+
+        Map<String, ArrayList<String>> map =  new HashMap<>();
+        map.put("all1",(ArrayList<String>) all1);
+        map.put("all2",(ArrayList<String>) all2);
+
+        return Result.success(map);
     }
 
 
