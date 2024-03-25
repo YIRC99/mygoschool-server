@@ -14,6 +14,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import yirc.mygoschool.sensitiveWord.MyWordAllow;
 import yirc.mygoschool.sensitiveWord.MyWordDeny;
+import yirc.mygoschool.sensitiveWord.SensitiveWordService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Version v1.0
@@ -30,8 +35,10 @@ public class SensitiveWordConfig {
 
     @Autowired
     private MyWordAllow myWordAllow;
+
     @Bean
     public SensitiveWordBs MySensitiveWordBs(){
+
         //合并白名单和黑名单 不仅有自己的还要有官方的
         IWordDeny wordDeny = WordDenys.chains(WordDenys.defaults(), myWordDeny);
         IWordAllow wordAllow = WordAllows.chains(WordAllows.defaults(), myWordAllow);
@@ -53,6 +60,7 @@ public class SensitiveWordConfig {
                 .wordResultCondition(WordResultConditions.alwaysTrue())//wordResultCondition 针对匹配的敏感词额外加工，比如可以限制英文单词必须全匹配
                 .wordDeny(wordDeny)
                 .wordAllow(wordAllow)
+                .charIgnore(SensitiveWordCharIgnores.specialChars())
                 .init();
         log.info("SensitiveWordBs 初始化成功");
         return wordBs;
