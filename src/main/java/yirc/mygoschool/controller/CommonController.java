@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.config.SensitiveWordConfig;
+import yirc.mygoschool.domain.Mysensitive;
 import yirc.mygoschool.sensitiveWord.SensitiveWordService;
+import yirc.mygoschool.service.MysensitiveService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,8 +33,7 @@ public class CommonController {
     private SensitiveWordBs sensitiveWordBs;
 
     @Autowired
-    private SensitiveWordService sensitiveWordService;
-
+    private MysensitiveService mysensitiveService;
 
     // 下载图片
     @GetMapping("/download")
@@ -139,6 +140,7 @@ public class CommonController {
 
     @PostMapping("/testWord")
     public Result TestWord(@RequestBody Map<String, String> requestBody){
+        // TODO 该接口为测试敏感词接口 不做任何用途 后期删掉
         String test = requestBody.get("test");
 
         List<String> all2 = SensitiveWordHelper.findAll(test);

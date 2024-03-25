@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yirc.mygoschool.mapper.AppriseMapper">
+
+    <resultMap id="BaseResultMap" type="yirc.mygoschool.domain.Apprise">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="createuserid" column="createUserId" jdbcType="VARCHAR"/>
+            <result property="receiveuserid" column="receiveUserId" jdbcType="VARCHAR"/>
+            <result property="apprisedata" column="appriseData" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="INTEGER"/>
+            <result property="createat" column="createAt" jdbcType="TIMESTAMP"/>
+            <result property="isdelate" column="isDelate" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,createUserId,receiveUserId,
+        appriseData,type,createAt,
+        isDelate
+    </sql>
+</mapper>
