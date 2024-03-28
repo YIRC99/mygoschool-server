@@ -38,6 +38,7 @@ public class CommonController {
     private MyNSFW myNSFW;
 
     @Autowired
+
     private MysensitiveService mysensitiveService;
 
     // 下载图片
