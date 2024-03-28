@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import yirc.mygoschool.Utils.MyNSFW;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.config.SensitiveWordConfig;
 import yirc.mygoschool.domain.Mysensitive;
+import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.sensitiveWord.SensitiveWordService;
 import yirc.mygoschool.service.MysensitiveService;
 
@@ -31,6 +33,9 @@ public class CommonController {
 
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+
+    @Autowired
+    private MyNSFW myNSFW;
 
     @Autowired
     private MysensitiveService mysensitiveService;
@@ -113,28 +118,56 @@ public class CommonController {
         if (!filename.contains(".jpg") && !filename.contains(".png") && !filename.contains(".jpeg")){
             return Result.error("文件格式不正确");
         }
-        String uuid = UUID.randomUUID().toString();
-        String projectRootPath = new File("").getAbsolutePath();
+
+//        String projectRootPath = new File("").getAbsolutePath();
+//        String uuid = UUID.randomUUID().toString();
+//        filename = "." + filename.split("\\.")[1];
+//        String relativePath = saveFilePath + uuid + filename; // 设置相对路径
+//        String resultPath = projectRootPath + relativePath;
+
+
         // 在项目根目录下构建相对路径
+        String projectRootPath = new File("").getAbsolutePath();
         filename = "." + filename.split("\\.")[1];
-        String relativePath = saveFilePath + uuid + filename; // 设置相对路径
-        String resultPath = projectRootPath + relativePath;
+        String uuid = UUID.randomUUID().toString();
+        String ResultFilename = uuid + filename;
+        String relativePath = projectRootPath + saveFilePath; // 设置相对路径
+
+
         //创建一个目录对象
-        File dir1 = new File(resultPath);
+        File dir1 = new File(relativePath);
         //判断目录是否存在
         if (!dir1.exists()) {
             //目录不存在 需要创建
             dir1.mkdirs();
         }
-
+        String resultPath = relativePath + ResultFilename;
         try{
             log.info("文件写入的路径为: {}",resultPath);
             file.transferTo(new File(resultPath));
         } catch (IOException e){
-            e.printStackTrace();
+            throw new CustomException("文件上传失败"+e.getMessage());
         }
 
-        return Result.success(uuid + filename);
+        // 创建线程处理图片
+        VirtualIsNSFW(resultPath);
+
+
+        return Result.success(ResultFilename);
+    }
+
+    /**
+     * 创建一个虚拟线程来处理图片的NSFW判断
+     * 但是为了不影响主线程的运行 所以判断的方法放到虚拟线程中
+     */
+    private void VirtualIsNSFW(String resultPath) {
+        Thread.ofVirtual().start(() -> {
+            try {
+                myNSFW.isNSFW(resultPath);
+            } catch (IOException e) {
+                throw new CustomException("处理"+resultPath+"图片时出错"+e.getMessage());
+            }
+        });
     }
 
 
