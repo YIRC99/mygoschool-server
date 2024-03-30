@@ -66,6 +66,7 @@ public class CarShareOrderController {
     public Result addCarShareOrder(@RequestBody Carshareorder carshareorder) {
         log.info("addCarShareOrder: {}", carshareorder);
         // 判断一下订单中是否有用户的联系信息保存一下 因为优先级并不高 所以开个虚拟线程就好
+        // TODO 不需要添加电话和微信了 添加图片地址
         Thread.ofVirtual().start(() -> {
             carshareorderService.isSavePhoneOrWeChat(carshareorder);
         });
@@ -138,6 +139,7 @@ public class CarShareOrderController {
 
     @PostMapping("/update")
     public Result update(@RequestBody Carshareorder order) {
+        //  TODO 修改的时候要加上for update锁
         order.setUpdateAt(LocalDateTime.now());
         carshareorderService.updateById(order);
         return Result.success("修改成功");
@@ -145,6 +147,8 @@ public class CarShareOrderController {
 
     @PostMapping("/delete")
     public Result deleteById(@RequestBody Carshareorder order){
+        //  TODO 删除的时候要加上for update锁
+
         LambdaUpdateWrapper<Carshareorder> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(Carshareorder::getIsDelete,0)
                 .eq(Carshareorder::getOrderid,order.getOrderid())
@@ -173,7 +177,6 @@ public class CarShareOrderController {
         String format = now.format(DateTimeFormatter.ofPattern("yyyy年M月d日 HH:mm"));
         bean.setTime3(new SubscribeDataBean.Time3(format));
 
-
         //组装接口所需对象
         SubscribeBean sendBean = new SubscribeBean();
         sendBean.setData(bean);//这里的订阅消息对象 不需要额外转json
@@ -183,7 +186,6 @@ public class CarShareOrderController {
         String jsonString = JSON.toJSONString(sendBean);
         // 3. 将JSON字符串封装成StringEntity，并设置内容类型为"application/json"
         HttpEntity entity = new StringEntity(jsonString, "UTF-8");
-
 
         // 4. 设置HttpPost请求的实体
         httpPost.setEntity(entity);

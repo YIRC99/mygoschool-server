@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import yirc.mygoschool.Utils.BaseContext;
 import yirc.mygoschool.Utils.MyNSFW;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.config.SensitiveWordConfig;
@@ -38,7 +39,6 @@ public class CommonController {
     private MyNSFW myNSFW;
 
     @Autowired
-
     private MysensitiveService mysensitiveService;
 
     // 下载图片
@@ -162,9 +162,11 @@ public class CommonController {
      * 但是为了不影响主线程的运行 所以判断的方法放到虚拟线程中
      */
     private void VirtualIsNSFW(String resultPath) {
+        // 提前取出来因为ThreadLocal切换线程之后报出的值会丢失
+        String currentUUID = BaseContext.getCurrentUUID();
         Thread.ofVirtual().start(() -> {
             try {
-                myNSFW.isNSFW(resultPath);
+                myNSFW.isNSFW(resultPath,currentUUID);
             } catch (IOException e) {
                 throw new CustomException("处理"+resultPath+"图片时出错"+e.getMessage());
             }

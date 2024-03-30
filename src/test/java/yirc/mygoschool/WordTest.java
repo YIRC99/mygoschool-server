@@ -8,7 +8,7 @@ import com.github.houbb.sensitive.word.support.allow.WordAllows;
 /**
  * @Version v1.0
  * @DateTime 2024/3/24 19:54
- * @Description TODO
+ * @Description
  * @Author 一见如初
  */
 public class WordTest {

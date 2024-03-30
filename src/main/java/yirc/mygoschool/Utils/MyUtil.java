@@ -19,6 +19,7 @@ public class MyUtil {
 
     //给你一个图片路径 将这个图片替换为空白图片但是不替换名称 覆盖掉
     public void replaceImg(String nsfwImgPath){
+        // TODO 覆盖图片之前 先提前保存一份
         String projectRootPath = new File("").getAbsolutePath();
         String dir =  projectRootPath + filePath + "default/";
         File file = new File(dir);

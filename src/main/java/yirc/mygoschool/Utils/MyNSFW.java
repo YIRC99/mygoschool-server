@@ -4,9 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import yirc.mygoschool.domain.Mynsfw;
 import yirc.mygoschool.exception.CustomException;
+import yirc.mygoschool.service.MynsfwService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.io.PrintWriter;
 /**
  * @Version v1.0
  * @DateTime 2024/3/28 21:36
- * @Description TODO
+ * @Description NSFW检测的工具
  * @Author 一见如初
  */
 @Component
@@ -37,6 +38,9 @@ public class MyNSFW implements CommandLineRunner {
 
     @Autowired
     private MyUtil myUtil;
+
+    @Autowired
+    private MynsfwService mynsfwService;
 
     private Process process;
     private PrintWriter out;
@@ -64,7 +68,7 @@ public class MyNSFW implements CommandLineRunner {
 
     }
 
-    public void isNSFW(String imgPath) throws IOException {
+    public void isNSFW(String imgPath,String userUUID) throws IOException {
         // 发送图片路径给Python脚本
         out.println(imgPath);
         String line = reader.readLine();
@@ -72,11 +76,18 @@ public class MyNSFW implements CommandLineRunner {
         // 判断图片是不是为NSFW图片 大于NSFWScore 观察一下   大于NSFWMaxScore直接替换图片
         if(ImgScore > NSFWScore && ImgScore < NSFWMaxScore){
             // 这张图片可能是NSFW图片
-            // TODO 创建数据库将图片路径记录
-
+            Mynsfw nsfwObj = new Mynsfw();
+            nsfwObj.setImgpath(imgPath);
+            nsfwObj.setStatus(0);
+            nsfwObj.setPostuseropenid(userUUID);
+            mynsfwService.save(nsfwObj);
         }else if(ImgScore > NSFWMaxScore){
             //这张图片一定是NSFW图片
-            // TODO 创建数据库将图片路径记录
+            Mynsfw nsfwObj = new Mynsfw();
+            nsfwObj.setImgpath(imgPath);
+            nsfwObj.setStatus(2);
+            nsfwObj.setPostuseropenid(userUUID);
+            mynsfwService.save(nsfwObj);
             myUtil.replaceImg(imgPath);
         }
     }

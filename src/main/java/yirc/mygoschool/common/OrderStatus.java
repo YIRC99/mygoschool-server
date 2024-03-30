@@ -3,7 +3,7 @@ package yirc.mygoschool.common;
 /**
  * @Version v1.0
  * @DateTime 2024/3/8 15:18
- * @Description TODO
+ * @Description 订单的状态
  * @Author 一见如初
  */
 public class OrderStatus {

@@ -7,7 +7,7 @@ import yirc.mygoschool.domain.Apprise;
 /**
  * @Version v1.0
  * @DateTime 2024/3/11 15:04
- * @Description TODO
+ * @Description
  * @Author 一见如初
  */
 @Data

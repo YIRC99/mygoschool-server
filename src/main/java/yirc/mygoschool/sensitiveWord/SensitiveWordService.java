@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * @Version v1.0
  * @DateTime 2024/3/25 0:02
- * @Description TODO
+ * @Description 违规词重新加载的接口
  * @Author 一见如初
  */
 @Component

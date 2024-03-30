@@ -5,10 +5,12 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.filter.GenericFilterBean;
+import yirc.mygoschool.Utils.BaseContext;
 import yirc.mygoschool.common.Result;
 
 
@@ -52,6 +54,10 @@ public class LoginFilter extends GenericFilterBean implements Filter {
                 return;
             }
         }
+        // 获取请求的header里面的token
+        String token = request.getHeader("Authorization");
+        // 当前请求的uuid 用来识别当前请求是谁
+        BaseContext.setCurrentUUID(token);
 
 //        // 不是登录和注册的请求需要验证token
 //        String token = request.getHeader("Authorization");
