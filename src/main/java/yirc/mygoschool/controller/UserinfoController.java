@@ -1,6 +1,7 @@
 package yirc.mygoschool.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -36,9 +37,13 @@ public class UserinfoController {
     @Value("${yirc99.WxSecret}")
     private String AppSecret;
 
+    @Autowired
+    private SensitiveWordBs sensitiveWordBs;
+
     @PostMapping("/byuserid")
     public Result getByUserId(@RequestBody Userinfo user){
         Userinfo userinfo = userinfoService.getById(user);
+        userinfo.setUsername(sensitiveWordBs.replace(userinfo.getUsername()));
         return Result.success(userinfo);
     }
     @PostMapping("/login")
@@ -50,6 +55,7 @@ public class UserinfoController {
             return Result.error("一键登录失败");
         Userinfo user = userinfoService.getByOpenId(wxResult);
         log.warn("wxResult:{}", wxResult);
+        user.setUsername(sensitiveWordBs.replace(user.getUsername()));
         return Result.success(user);
     }
 

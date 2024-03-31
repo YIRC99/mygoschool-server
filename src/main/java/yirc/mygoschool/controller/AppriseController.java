@@ -1,6 +1,7 @@
 package yirc.mygoschool.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class AppriseController {
 
     @Autowired
     private CarshareorderService carshareorderService;
+
+    @Autowired
+    private SensitiveWordBs sensitiveWordBs;
 
     @PostMapping("/add")
     @Transactional
@@ -67,6 +71,9 @@ public class AppriseController {
         wrapper.eq(Apprise::getIsdelate,0)
                 .eq(Apprise::getReceiveuserid,user.getOpenid());
         List<Apprise> list = appriseService.list(wrapper);
+        list.forEach(i -> {
+            i.setApprisedata(sensitiveWordBs.replace(i.getApprisedata()));
+        });
         return Result.success(list);
     }
 

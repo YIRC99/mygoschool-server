@@ -38,8 +38,6 @@ public class CommonController {
     @Autowired
     private MyNSFW myNSFW;
 
-    @Autowired
-    private MysensitiveService mysensitiveService;
 
     // 下载图片
     @GetMapping("/download")
@@ -52,7 +50,7 @@ public class CommonController {
         //获取项目根目录
         String projectRootPath = new File("").getAbsolutePath();
         // 在项目根目录下构建相对路径
-        String relativePath = filePath + path + "/"; // 设置相对路径
+        String relativePath = filePath + path + File.separator; // 设置相对路径
         String resultPath = projectRootPath + File.separator + relativePath;
         log.info("文件路径: {}",resultPath);
         //创建一个目录对象
@@ -65,9 +63,9 @@ public class CommonController {
         try{
             fis = new FileInputStream(new File(resultPath + name));
             ops = response.getOutputStream();
-            response.setContentType("image/jpeg");
-            response.setContentType("image/jpg");
-            response.setContentType("image/png");
+            response.setContentType("image"+ File.separator+"jpeg");
+            response.setContentType("image"+ File.separator+"jpg");
+            response.setContentType("image"+ File.separator+"png");
             int len = 0;
             byte[] buffer = new byte[1024];
             while ((len = fis.read(buffer)) != -1){
@@ -80,7 +78,7 @@ public class CommonController {
             log.error("文件下载失败: {}",e.getMessage());
             fis = new FileInputStream(new File(resultPath + "nullFindFile.jpg"));
             ops = response.getOutputStream();
-            response.setContentType("image/jpeg");
+            response.setContentType("image"+File.separator+"jpeg");
             int len = 0;
             byte[] buffer = new byte[1024];
             while ((len = fis.read(buffer)) != -1){
@@ -109,7 +107,7 @@ public class CommonController {
     @PostMapping("/upload")
     public Result upload(MultipartFile file,@RequestParam String path) throws IOException{
         // 根据参数动态的将图片保存到不同的地方
-        String saveFilePath = filePath + path + "/";
+        String saveFilePath = filePath + path + File.separator;
         log.info("path: {}",path);
 
 
@@ -181,7 +179,6 @@ public class CommonController {
 
         List<String> all2 = SensitiveWordHelper.findAll(test);
         List<String> all1 = sensitiveWordBs.findAll(test);
-
         Map<String, ArrayList<String>> map =  new HashMap<>();
         map.put("all1",(ArrayList<String>) all1);
         map.put("all2",(ArrayList<String>) all2);

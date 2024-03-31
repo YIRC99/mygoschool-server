@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -62,6 +63,9 @@ public class CarShareOrderController {
     @Autowired
     private AccessTokenService accessTokenService;
 
+    @Autowired
+    private SensitiveWordBs sensitiveWordBs;
+
     @PostMapping("/add")
     public Result addCarShareOrder(@RequestBody Carshareorder carshareorder) {
         log.info("addCarShareOrder: {}", carshareorder);
@@ -118,6 +122,7 @@ public class CarShareOrderController {
         log.info("根据用户id获取用户接受的拼车订单: {}", user);
         // 查询自己接受的订单 顺便带上创建用户的信息
         List<CarshareorderDto> orders = carshareorderService.getReceiveByUserId(user);
+        replaceSensitive(orders);
         return Result.success(orders);
     }
 
@@ -127,12 +132,14 @@ public class CarShareOrderController {
         log.info("根据id获取用户拼车订单: {}", user);
         // 获取用户发布的拼车 如果有人接受了 就附带上接受用户的信息
         List<CarshareorderDto> results = carshareorderService.getUpOrderByUserId(user);
+        replaceSensitive(results);
         return Result.success(results);
     }
 
     @PostMapping("/getbyorderid")
     public Result getByOrderIdd(@RequestBody Carshareorder order){
         Carshareorder byId = carshareorderService.getById(order);
+        byId.setRemark(sensitiveWordBs.replace(byId.getRemark()));
         return Result.success(byId);
     }
 
@@ -158,6 +165,17 @@ public class CarShareOrderController {
             return Result.error("删除失败");
         }
         return Result.success("删除成功");
+    }
+
+    private void replaceSensitive(List<CarshareorderDto> results){
+        results.forEach(i -> {
+            if(i.getCreateUserInfo() != null){
+                Userinfo userInfo = i.getCreateUserInfo();
+                userInfo.setUsername(sensitiveWordBs.replace(userInfo.getUsername()));
+                i.setCreateUserInfo(userInfo);
+            }
+            i.setRemark(sensitiveWordBs.replace(i.getRemark()));
+        });
     }
 
     private void sendUserMeg(String openid) throws IOException {

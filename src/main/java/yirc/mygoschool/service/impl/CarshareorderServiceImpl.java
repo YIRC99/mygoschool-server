@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.object.UpdatableSqlQuery;
@@ -34,6 +35,9 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
 
     @Autowired
     private UserinfoService userinfoService;
+
+    @Autowired
+    private SensitiveWordBs sensitiveWordBs;
 
     @Override
     public boolean isSavePhoneOrWeChat(Carshareorder order) {
@@ -115,6 +119,12 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
             Userinfo userinfo = userinfoService.getOne(userWrapper);
             BeanUtils.copyProperties(item, Dto);
             Dto.setCreateUserInfo(userinfo);
+            // 过滤敏感词
+            Dto.setRemark(sensitiveWordBs.replace(Dto.getRemark()));
+            Userinfo userInfo = Dto.getCreateUserInfo();
+            userInfo.setUsername(sensitiveWordBs.replace(userInfo.getUsername()));
+            Dto.setCreateUserInfo(userInfo);
+
             ResultList.add(Dto);
         });
         pageDto.setRecords(ResultList);

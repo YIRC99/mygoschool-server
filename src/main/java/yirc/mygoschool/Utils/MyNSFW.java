@@ -73,6 +73,7 @@ public class MyNSFW implements CommandLineRunner {
         out.println(imgPath);
         String line = reader.readLine();
         double ImgScore = Double.parseDouble(line);
+        log.info("图片NSFW评分为：" + ImgScore);
         // 判断图片是不是为NSFW图片 大于NSFWScore 观察一下   大于NSFWMaxScore直接替换图片
         if(ImgScore > NSFWScore && ImgScore < NSFWMaxScore){
             // 这张图片可能是NSFW图片
