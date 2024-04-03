@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.CarshareorderDto;
+import yirc.mygoschool.Dto.PageInfoCar;
 import yirc.mygoschool.anno.OrderOverdue;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.config.AccessTokenService;
@@ -48,14 +49,9 @@ import java.util.List;
 @RequestMapping("/carshareorder")
 public class CarShareOrderController {
 
-    @Value("${yirc99.WxSecret}")
-    private String AppSecret;
 
     @Value("${yirc99.Template.id}")
     private String TemplateId;
-
-    @Autowired
-    private UserinfoService userinfoService;
 
     @Autowired
     private CarshareorderService carshareorderService;
@@ -69,10 +65,11 @@ public class CarShareOrderController {
     @PostMapping("/add")
     public Result addCarShareOrder(@RequestBody Carshareorder carshareorder) {
         log.info("addCarShareOrder: {}", carshareorder);
-        // 判断一下订单中是否有用户的联系信息保存一下 因为优先级并不高 所以开个虚拟线程就好
-        // TODO 不需要添加电话和微信了 添加图片地址
+        // 保存用户的添加的微信二维码 方便下次直接选择不上传 因为优先级并不高 所以开个虚拟线程就好
         Thread.ofVirtual().start(() -> {
-            carshareorderService.isSavePhoneOrWeChat(carshareorder);
+            // 保存电话和微信号 但是因为输入麻烦 选择废弃 这里可以抽象出来 因为 拼车和闲置都有微信图片属性 但是已经是后期了 懒得改 就这样吧
+//            carshareorderService.isSavePhoneOrWeChat(carshareorder);
+            carshareorderService.SaveWeChatImg(carshareorder);
         });
         var issuccess = carshareorderService.save(carshareorder);
         if (issuccess)
@@ -81,8 +78,8 @@ public class CarShareOrderController {
     }
 
     @PostMapping("/page")
-    public Result list(@RequestBody PageInfo pageInfo) {
-        log.error("分页查询的参数为: {} {} {} {}", pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getPageDate(), pageInfo.getStartAddName());
+    public Result list(@RequestBody PageInfoCar pageInfo) {
+        log.info("分页查询的参数为: {} {} {} {}", pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getPageDate(), pageInfo.getStartAddName());
         if (pageInfo.getPageNum() == null || pageInfo.getPageNum() < 1
                 || pageInfo.getPageSize() == null || pageInfo.getPageSize() < 1) {
             throw new CustomException("分页参数错误");

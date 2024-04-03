@@ -8,68 +8,72 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import lombok.Data;
+import lombok.Value;
 
 /**
  * 
- * @TableName userinfo
+ * @TableName shop
  */
-@TableName(value ="userinfo")
+@TableName(value ="shop")
 @Data
-public class Userinfo implements Serializable {
+public class Shop implements Serializable {
     /**
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private String userid;
-
-    @TableField(value = "openId")
-    private String openid;
+    private Long id;
 
     /**
      * 
      */
-    private String username;
+    private String detail;
 
     /**
      * 
      */
-    private String userwx;
+    private Double price;
 
-    @TableField(value = "userWxImg")
-    private String userWxImg;
+    /**
+     * 0 濂溪校区 1鹤问湖校区 2其他
+     */
+    private Integer address;
+
+    /**
+     * 图片列表 英文逗号分割
+     */
+    private String imgs;
+
+    /**
+     * 0在售 1下架 
+     */
+    private Integer status;
 
     /**
      * 
      */
-    private String userphone;
+    private String createuserid;
 
     /**
      * 
      */
-    private String avatar;
+    private String wechatimg;
 
     /**
-     * 1为男 0为女
+     * 
      */
-    private Integer sex;
+    private Integer isdelete;
 
     /**
-     * 举报次数
+     * 商品浏览量
      */
-    private Integer reportnum;
+    private Integer browse;
 
-    /**
-     * 是不是学生
-     */
-    private Integer isstudent;
-
-    /**
-     * 是不是被封号了
-     */
-    private Integer isblack;
+    @TableField(value = "cancelTime")
+    private LocalDateTime cancelTime;
 
     @TableField(value = "createAt")
     private LocalDateTime createAt;
+
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

@@ -1,15 +1,14 @@
 package yirc.mygoschool.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.object.UpdatableSqlQuery;
 import yirc.mygoschool.Dto.CarshareorderDto;
+import yirc.mygoschool.Dto.PageInfoCar;
 import yirc.mygoschool.domain.Carshareorder;
 import yirc.mygoschool.domain.PageInfo;
 import yirc.mygoschool.domain.Userinfo;
@@ -23,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 一见如初
@@ -38,6 +38,15 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
 
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+
+    @Override
+    public boolean SaveWeChatImg(Carshareorder order) {
+        if(Objects.isNull(order.getWechatImg())) return false;
+        LambdaUpdateWrapper<Userinfo> query = new LambdaUpdateWrapper<>();
+        query.eq(Userinfo::getOpenid, order.getCreateuserid())
+                .set(Userinfo::getUserWxImg, order.getWechatImg());
+        return userinfoService.update(query);
+    }
 
     @Override
     public boolean isSavePhoneOrWeChat(Carshareorder order) {
@@ -62,7 +71,7 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
     }
 
     @Override
-    public Page<CarshareorderDto> listByPage(PageInfo pageInfo) {
+    public Page<CarshareorderDto> listByPage(PageInfoCar pageInfo) {
         Page<CarshareorderDto> pageDto = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
 
         Page<Carshareorder> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
@@ -182,6 +191,8 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
         }
         return orderDto;
     }
+
+
 }
 
 

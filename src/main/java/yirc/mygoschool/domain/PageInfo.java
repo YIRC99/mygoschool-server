@@ -14,6 +14,4 @@ import java.time.LocalDate;
 public class PageInfo {
     private Integer pageNum;
     private Integer pageSize;
-    private LocalDate pageDate;
-    private String startAddName;
 }

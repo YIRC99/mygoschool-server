@@ -81,6 +81,7 @@ public class MyNSFW implements CommandLineRunner {
             nsfwObj.setImgpath(imgPath);
             nsfwObj.setStatus(0);
             nsfwObj.setPostuseropenid(userUUID);
+            nsfwObj.setScore(ImgScore);
             mynsfwService.save(nsfwObj);
         }else if(ImgScore > NSFWMaxScore){
             //这张图片一定是NSFW图片
@@ -88,6 +89,7 @@ public class MyNSFW implements CommandLineRunner {
             nsfwObj.setImgpath(imgPath);
             nsfwObj.setStatus(2);
             nsfwObj.setPostuseropenid(userUUID);
+            nsfwObj.setScore(ImgScore);
             mynsfwService.save(nsfwObj);
             myUtil.replaceImg(imgPath);
         }

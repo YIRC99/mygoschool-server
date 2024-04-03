@@ -10,11 +10,19 @@ spring:
     password: ENC(g6iW3UD6nLt+aK4Q3S3OkDjM1OBT9WSL)
   threads:
     virtual:
-      enabled: true
+      enabled: true # 开启虚拟线程
   servlet:
     multipart:
       max-file-size: 5MB
       max-request-size: 5MB
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      timeout: 3000ms
+
 logging:
   config:
     loggers:
@@ -56,6 +64,6 @@ yirc99:
   pythonExePath: F:\GitHubCode\isNSFW\my-success_1\.venv10\Scripts\python.exe
   pythonPath: F:\GitHubCode\isNSFW\my-success_1\testWhile.py
   NSFWScore: 0.25 # 超过这个值，则认为图片可能为NSFW图片保存
-  NSFWMaxScore: 0.7 # 超过这个值，则认为图片一定是NSFW图片 直接替换为违规图片
+  NSFWMaxScore: 0.75 # 超过这个值，则认为图片一定是NSFW图片 直接替换为违规图片
   Template:
     id: R0HVPNJRywpmvaA5xO6YWFfjLdGqcjWPB0-rqRkmkbk

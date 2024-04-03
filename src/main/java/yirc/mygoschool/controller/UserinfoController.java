@@ -11,6 +11,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.common.WxResult;
@@ -19,6 +20,7 @@ import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.UserinfoService;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @Version v1.0
@@ -39,6 +41,18 @@ public class UserinfoController {
 
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+
+
+
+    @GetMapping("/wxImg")
+    public Result wxImg(@RequestParam String userid){
+        if (Objects.isNull(userid))
+            return Result.error("请求参数错误");
+        Userinfo userinfo = userinfoService.getById(userid);
+        if(Objects.isNull(userinfo))
+            return Result.error("请求参数不存在");
+        return Result.success(userinfo.getUserWxImg());
+    }
 
     @PostMapping("/byuserid")
     public Result getByUserId(@RequestBody Userinfo user){

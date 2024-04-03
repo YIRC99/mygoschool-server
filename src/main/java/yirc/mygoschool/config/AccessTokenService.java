@@ -10,8 +10,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import yirc.mygoschool.exception.CustomException;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @Version v1.0
@@ -54,7 +57,14 @@ public class AccessTokenService {
 
             // 将accessToken放入缓存，便于其他服务获取
         if (cacheManager != null) {
-            cacheManager.getCache("accessToken").put("access_token", accessToken);
+            try{
+                Cache accessToken1 = Objects.requireNonNull(cacheManager.getCache("accessToken"));
+                // 因为已经开启了redis 所有springboot的的缓存管理器 就已经被替代了 必须开始redis 才行
+                accessToken1.put("access_token", accessToken);
+            }catch (Exception e){
+                throw new CustomException("获取微信access_token失败,请检查网络或者redis启动");
+            }
+
         }
     }
 
