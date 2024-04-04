@@ -1,6 +1,7 @@
 package yirc.mygoschool.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -60,6 +61,17 @@ public class UserinfoController {
         userinfo.setUsername(sensitiveWordBs.replace(userinfo.getUsername()));
         return Result.success(userinfo);
     }
+
+    @PostMapping("/byopenid")
+    public Result getByOpenId(@RequestBody Userinfo user){
+        LambdaQueryWrapper<Userinfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Userinfo::getOpenid, user.getOpenid());
+        Userinfo userinfo = userinfoService.getOne(wrapper);
+        userinfo.setUsername(sensitiveWordBs.replace(userinfo.getUsername()));
+        return Result.success(userinfo);
+    }
+
+
     @PostMapping("/login")
     public Result login(@RequestParam String code){
         log.info("code:{}", code);

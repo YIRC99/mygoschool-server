@@ -18,7 +18,9 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<Object,Object> redisTemplate(RedisConnectionFactory factory){
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
+        // key 和 value 的序列化方式都设置为String 不然返回自定义的类型会报错
         template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setConnectionFactory(factory);
         return template;
