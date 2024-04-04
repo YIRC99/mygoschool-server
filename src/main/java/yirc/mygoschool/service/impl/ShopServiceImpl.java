@@ -49,8 +49,8 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop>
                 .eq(Shop::getStatus,0); //这个状态0在售 1下架
         wrapper.gt(Shop::getCancelTime, LocalDateTime.now());
         wrapper.orderByDesc(Shop::getCreateAt);
+        wrapper.in(Shop::getAddress, pageInfo.getAddressCodeArr());
 
-        // TODO 查询地址 需要in address
 
         Page<Shop> pageinfo = this.page(page, wrapper);
         pageinfo.getRecords().forEach(shop -> {

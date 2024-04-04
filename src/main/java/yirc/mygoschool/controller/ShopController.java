@@ -14,6 +14,8 @@ import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.ShopService;
 
+import java.util.Objects;
+
 /**
  * @Version v1.0
  * @DateTime 2024/4/2 0:00
@@ -42,10 +44,13 @@ public class ShopController {
 
     @PostMapping("/page")
     public Result list(@RequestBody PageInfoShop pageInfo){
-        log.info("/page/list 分页查询的参数为: {} {} {}", pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getAddressCode());
-        if (pageInfo.getPageNum() == null || pageInfo.getPageNum() < 1
-                || pageInfo.getPageSize() == null || pageInfo.getPageSize() < 1) {
-            throw new CustomException("分页参数错误");
+        log.info("/page/list 分页查询的参数为: {} {} {}",
+                pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getAddressCodeArr());
+
+        if (Objects.isNull(pageInfo.getPageNum()) ||
+            Objects.isNull(pageInfo.getPageSize()) ||
+            (pageInfo.getAddressCodeArr().length == 0)){
+            return Result.error("分页参数错误");
         }
         Page<Shop> page =  shopService.listByPage(pageInfo);
         return Result.success(page);

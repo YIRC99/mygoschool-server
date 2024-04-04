@@ -3,6 +3,8 @@ package yirc.mygoschool.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import jakarta.annotation.PostConstruct;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -22,8 +24,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import yirc.mygoschool.exception.CustomException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Version v1.0
@@ -35,6 +40,7 @@ import java.util.Objects;
 @EnableScheduling // 开启定时任务
 @EnableCaching // 开启缓存支持（可选，用于将AccessToken缓存）
 @Service
+@Slf4j
 public class AccessTokenService {
 
     @Autowired
@@ -44,9 +50,48 @@ public class AccessTokenService {
     private String AppSecret;
     private String accessToken;
 
+
     @PostConstruct // 项目启动时执行
-    public void init() throws IOException {
-        refreshAccessToken();
+    public void init()  {
+        try{
+            initRedis();
+        }catch (IOException | InterruptedException e){
+            throw new CustomException("redis 启动失败");
+        }
+        try{
+            refreshAccessToken();
+        }catch (IOException e){
+            throw new CustomException("初始化WX accessToken 失败");
+        }
+    }
+
+    // 检查redis是否开启 没有开启自动开启
+    private void initRedis() throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder("redis-cli", "ping");
+        Process process = processBuilder.start();
+        // 读取命令输出
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        StringBuilder output = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            output.append(line).append("\n");
+        }
+        // 等待进程结束
+        int exitCode = process.waitFor();
+        if(exitCode == 0 && output.toString().contains("PONG")){
+            log.info("redis已开启");
+        }else{
+            // 启动 Redis
+            ProcessBuilder redisProcess = new ProcessBuilder("redis-server"); // 根据实际情况修改路径
+            Process start = redisProcess.start();
+            // 设置10秒启动时间 超时则认为启动失败
+            boolean started = start.waitFor(10, TimeUnit.SECONDS);
+            if (started) {
+                log.info("自动启动本机redis");
+            } else {
+                throw new CustomException("无法启动 Redis");
+            }
+        }
     }
 
     @Scheduled(cron = "0 0 * * * ?") // 每小时执行一次，cron表达式根据实际需求调整
