@@ -12,6 +12,7 @@ import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.PageInfo;
 import yirc.mygoschool.domain.Shop;
+import yirc.mygoschool.domain.Userinfo;
 import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.ShopService;
 
@@ -122,5 +123,31 @@ public class ShopController {
         List<Shop> list = shopService.list(wrapper);
         return Result.success(list);
     }
+
+    @PostMapping("/byUserId")
+    public Result listByUserId(@RequestBody Userinfo user) {
+        log.info("/byUserId/list 分页查询的参数为: {}", user);
+        LambdaQueryWrapper<Shop> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Shop::getCreateuserid, user.getOpenid());
+
+        return Result.success(shopService.list(wrapper));
+    }
+
+    @PostMapping("/update")
+    public Result updateShop(@RequestBody Shop shop) {
+        if (shop.getId() == null)
+            throw new CustomException("商品id不能为空");
+        shop.setBrowse(0);
+        return Result.success(shopService.updateById(shop));
+    }
+
+    @PostMapping("/delete")
+    public Result deleteShop(@RequestBody Shop shop) {
+        if (shop.getId() == null)
+            throw new CustomException("商品id不能为空");
+        shop.setIsdelete(1);
+        return Result.success(shopService.updateById(shop));
+    }
+
 
 }

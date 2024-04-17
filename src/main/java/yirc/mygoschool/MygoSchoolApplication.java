@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class MygoSchoolApplication {
     public static void main(String[] args) {
-
         SpringApplication.run(MygoSchoolApplication.class, args);
         System.out.println(" __   __   ___    ____      ____     ___    ___      ");
         System.out.println(" \\ \\ / /  |_ _|  |  _ \\   / ___|   / _ \\   / _ \\   ");
@@ -27,5 +26,4 @@ public class MygoSchoolApplication {
         System.out.println("   |_|    |___|  |_|\\_\\   \\____|    /_/      /_/      ");
         log.info("项目启动成功");
     }
-
 }

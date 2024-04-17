@@ -16,5 +16,7 @@ public class WordTest {
         SensitiveWordBs init = SensitiveWordBs.newInstance().init();
         boolean contains = init.contains("f五星红旗迎风飘扬，毛主席的画像屹立在天安门前。");
         System.out.println(contains);
+
+
     }
 }
