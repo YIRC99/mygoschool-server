@@ -1,12 +1,13 @@
 package yirc.mygoschool.controller;
 
+import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.sensitiveWord.SensitiveWordService;
+
+import java.util.Map;
 
 /**
  * @Version v1.0
@@ -21,6 +22,17 @@ public class SensitiveController {
 
     @Autowired
     private SensitiveWordService sensitiveWordService;
+
+    @Autowired
+    private SensitiveWordBs sensitiveWordBs;
+
+
+    @PostMapping("/test")
+    public Result test(@RequestBody Map<String,String> obj){
+        String result = sensitiveWordBs.replace(obj.get("text"));
+        log.info("result:{}", result);
+        return Result.success(result);
+    }
 
     @PostMapping
     public Result myRefresh(){

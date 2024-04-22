@@ -37,6 +37,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Version v1.0
@@ -164,6 +166,31 @@ public class CarShareOrderController {
         return Result.success("删除成功");
     }
 
+    //获取用户发布的订单 第三者的视角 过滤掉超时的
+    @PostMapping("/getbyuserid/up")
+    public Result getUpOrderByUserId(@RequestBody Userinfo user){
+        log.info("根据用户id获取用户发布的拼车订单: {}", user);
+        // 获取用户发布的拼车 如果有人接受了 就附带上接受用户的信息
+        LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Carshareorder::getCreateuserid,user.getOpenid())
+                .eq(Carshareorder::getIsDelete,0)
+                .eq(Carshareorder::getStatus,0)
+                .orderByDesc(Carshareorder::getStartdatetime)
+                .ge(Carshareorder::getStartdatetime,LocalDateTime.now());
+        List<Carshareorder> results = carshareorderService.list(wrapper);
+        // 转一下格式 然后脱敏
+        List<CarshareorderDto> dtoResults = results.stream()
+                .map(i -> {
+                    CarshareorderDto dto = new CarshareorderDto();
+                    BeanUtils.copyProperties(i, dto);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        replaceSensitive(dtoResults);
+        return Result.success(dtoResults);
+    }
+
+    // 对order的用户名和备注进行脱敏
     private void replaceSensitive(List<CarshareorderDto> results){
         results.forEach(i -> {
             if(i.getCreateUserInfo() != null){
@@ -175,6 +202,7 @@ public class CarShareOrderController {
         });
     }
 
+    // order被接受后 发送微信消息
     private void sendUserMeg(String openid) throws IOException {
         // 创建HttpClient实例
         CloseableHttpClient httpClient = HttpClients.createDefault();

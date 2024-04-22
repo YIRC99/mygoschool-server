@@ -2,6 +2,7 @@ package yirc.mygoschool.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,10 @@ public class ShopController {
 
     @Resource
     private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private SensitiveWordBs sensitiveWordBs;
+
 
     @PostMapping("/addbrowse")
     public Result browseAdd(@RequestBody Shop shop) {
@@ -128,7 +133,8 @@ public class ShopController {
     public Result listByUserId(@RequestBody Userinfo user) {
         log.info("/byUserId/list 分页查询的参数为: {}", user);
         LambdaQueryWrapper<Shop> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Shop::getCreateuserid, user.getOpenid());
+        wrapper.eq(Shop::getCreateuserid, user.getOpenid())
+                .eq(Shop::getIsdelete,0);
 
         return Result.success(shopService.list(wrapper));
     }
@@ -147,6 +153,31 @@ public class ShopController {
             throw new CustomException("商品id不能为空");
         shop.setIsdelete(1);
         return Result.success(shopService.updateById(shop));
+    }
+
+    //获取用户发布的闲置 第三者的视角 过滤掉过期的
+    @PostMapping("/getbyuserid/up")
+    public Result getUpOrderByUserId(@RequestBody Userinfo user) {
+        log.info("/getbyuserid/up 分页查询的参数为: {}", user);
+        LambdaQueryWrapper<Shop> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Shop::getCreateuserid, user.getOpenid())
+                .eq(Shop::getIsdelete, 0)
+                .eq(Shop::getStatus, 0)
+                .gt(Shop::getCancelTime, LocalDateTime.now());
+        List<Shop> list = shopService.list(wrapper);
+        list.forEach(i ->{
+            i.setDetail(sensitiveWordBs.replace(i.getDetail()));
+        });
+        return Result.success(list);
+    }
+
+    @PostMapping("/receive")
+    public Result getReceiveByUserId(@RequestBody Shop shop) {
+        Shop byId = shopService.getById(shop.getId());
+        if(byId.getIsdelete() == 0){
+            return Result.success("success");
+        }
+        return Result.error("商品不存在或已删除");
     }
 
 
