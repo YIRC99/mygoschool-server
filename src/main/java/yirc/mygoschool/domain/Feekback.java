@@ -49,6 +49,9 @@ public class Feekback implements Serializable {
     @TableField(value = "reportId")
     private long reportId;
 
+    @TableField(value = "isDelete")
+    private Integer isDelete;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

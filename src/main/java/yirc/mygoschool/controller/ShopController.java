@@ -131,9 +131,10 @@ public class ShopController {
 
     @PostMapping("/byUserId")
     public Result listByUserId(@RequestBody Userinfo user) {
-        log.info("/byUserId/list 分页查询的参数为: {}", user);
+        log.info("/byUserId/list 查询的参数为: {}", user);
         LambdaQueryWrapper<Shop> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Shop::getCreateuserid, user.getOpenid())
+                .orderByDesc(Shop::getCreateAt)
                 .eq(Shop::getIsdelete,0);
 
         return Result.success(shopService.list(wrapper));

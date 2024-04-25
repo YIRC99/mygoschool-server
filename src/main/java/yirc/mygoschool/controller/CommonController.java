@@ -33,9 +33,6 @@ public class CommonController {
     private String filePath;
 
     @Autowired
-    private SensitiveWordBs sensitiveWordBs;
-
-    @Autowired
     private MyNSFW myNSFW;
 
 
@@ -170,22 +167,4 @@ public class CommonController {
             }
         });
     }
-
-
-    @PostMapping("/testWord")
-    public Result TestWord(@RequestBody Map<String, String> requestBody){
-        // TODO 该接口为测试敏感词接口 不做任何用途 后期删掉
-        String test = requestBody.get("test");
-
-        List<String> all2 = SensitiveWordHelper.findAll(test);
-        List<String> all1 = sensitiveWordBs.findAll(test);
-        Map<String, ArrayList<String>> map =  new HashMap<>();
-        map.put("all1",(ArrayList<String>) all1);
-        map.put("all2",(ArrayList<String>) all2);
-
-        return Result.success(map);
-    }
-
-
-
 }
