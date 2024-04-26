@@ -1,10 +1,13 @@
 package yirc.mygoschool.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
+import yirc.mygoschool.Dto.PageInfoUser;
 import yirc.mygoschool.common.WxResult;
+import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.domain.Userinfo;
 import yirc.mygoschool.service.UserinfoService;
 import yirc.mygoschool.mapper.UserinfoMapper;
@@ -43,6 +46,16 @@ public class UserinfoServiceImpl extends ServiceImpl<UserinfoMapper, Userinfo>
             return newUser;
         }
         return userinfo;
+    }
+
+    @Override
+    public Page<Userinfo> listByPage(PageInfoUser pageInfo) {
+        Page<Userinfo> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
+        LambdaQueryWrapper<Userinfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(pageInfo.getIsBlack() != null, Userinfo::getIsblack, pageInfo.getIsBlack())
+                .orderByDesc(Userinfo::getCreateAt);
+        Page<Userinfo> userinfoPage = this.page(page, wrapper);
+        return userinfoPage;
     }
 }
 

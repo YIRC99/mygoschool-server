@@ -115,12 +115,6 @@ public class CommonController {
             return Result.error("文件格式不正确");
         }
 
-//        String projectRootPath = new File("").getAbsolutePath();
-//        String uuid = UUID.randomUUID().toString();
-//        filename = "." + filename.split("\\.")[1];
-//        String relativePath = saveFilePath + uuid + filename; // 设置相对路径
-//        String resultPath = projectRootPath + relativePath;
-
 
         // 在项目根目录下构建相对路径
         String projectRootPath = new File("").getAbsolutePath();

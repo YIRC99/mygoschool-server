@@ -35,7 +35,6 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         // 配置不需要
         String[] urls = new String[]{
                 "/user/login",
-                "/user/logins",
                 "/user/register",
                 "/static/images/*",
                 "/static/avatar/*",
@@ -55,9 +54,15 @@ public class LoginFilter extends GenericFilterBean implements Filter {
             }
         }
         // 获取请求的header里面的token
+        // 未来可以在jwt里面设置UserId
         String token = request.getHeader("Authorization");
-        // 当前请求的uuid 用来识别当前请求是谁
-        BaseContext.setCurrentUUID(token);
+        String userId = request.getHeader("UserId"); // TODO 之后这个userid从jwt里面取
+        // 当前请求的userId 用来识别当前请求是谁
+        BaseContext.setCurrentUUID(userId);
+
+        // TODO 前后端通讯加密
+
+        // TODO token验证
 
 //        // 不是登录和注册的请求需要验证token
 //        String token = request.getHeader("Authorization");

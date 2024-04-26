@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @Version v1.0
  * @DateTime 2024/3/4 18:52
- * @Description TODO
+ * @Description 微信订阅模板
  * @Author 一见如初
  */
 @Data

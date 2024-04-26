@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @Version v1.0
  * @DateTime 2024/3/12 11:26
- * @Description TODO
+ * @Description 公告控制器
  * @Author 一见如初
  */
 @RestController

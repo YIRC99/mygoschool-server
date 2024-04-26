@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * @Version v1.0
  * @DateTime 2024/3/4 18:49
- * @Description TODO
+ * @Description 微信通知备忘录模板
  * @Author 一见如初
  */
 @Data

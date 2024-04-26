@@ -11,7 +11,7 @@ import yirc.mygoschool.service.ShopService;
 /**
  * @Version v1.0
  * @DateTime 2024/4/5 1:01
- * @Description TODO
+ * @Description redis测试类
  * @Author 一见如初
  */
 @SpringBootTest

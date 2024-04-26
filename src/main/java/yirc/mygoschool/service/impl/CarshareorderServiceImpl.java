@@ -87,10 +87,12 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
             if (!"其他".equals(pageInfo.getStartAddName())) {
                 // 新校区不仅濂溪校区一个关键词 可能出现 还有  九江职业大学新校区
                 if ("濂溪校区".equals(pageInfo.getStartAddName())) {
+                    // TODO 这里加一个需求  如果目的地是九职大也算
                     wrapper.and(i -> i.like(Carshareorder::getStartaddressall, pageInfo.getStartAddName())
                             .or().like(Carshareorder::getStartaddressall, "九江职业大学-北门")
                             .or().like(Carshareorder::getStartaddressall, "九江职业大学新校区"));
                 } else if ("鹤问湖校区".equals(pageInfo.getStartAddName())) {
+                    // TODO 这里加一个需求  如果目的地是九职大也算
                     wrapper.like(Carshareorder::getStartaddressall, pageInfo.getStartAddName());
                 }
             } else {

@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @Version v1.0
  * @DateTime 2024/3/26 0:07
- * @Description TODO
+ * @Description 违规词控制器
  * @Author 一见如初
  */
 @Slf4j

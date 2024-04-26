@@ -52,6 +52,12 @@ public class Feekback implements Serializable {
     @TableField(value = "isDelete")
     private Integer isDelete;
 
+    /**
+     * 0就是意见反馈 1就是拼车投诉 2就是闲置投诉
+     */
+    @TableField(value = "reportType")
+    private Integer reportType;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

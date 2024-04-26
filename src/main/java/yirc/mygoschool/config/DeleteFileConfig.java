@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @Version v1.0
  * @DateTime 2024/4/24 12:01
- * @Description TODO
+ * @Description 自动删除文件的配置类
  * @Author 一见如初
  */
 @Configuration

@@ -2,6 +2,7 @@ package yirc.mygoschool.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -12,10 +13,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import yirc.mygoschool.Dto.PageInfoUser;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.common.WxResult;
+import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.domain.Userinfo;
 import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.UserinfoService;
@@ -26,7 +30,7 @@ import java.util.Objects;
 /**
  * @Version v1.0
  * @DateTime 2024/2/26 21:53
- * @Description TODO
+ * @Description 用户控制器
  * @Author 一见如初
  */
 @Slf4j
@@ -43,27 +47,38 @@ public class UserinfoController {
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
 
+    @PostMapping("/page")
+    public Result list(@RequestBody PageInfoUser pageInfo) {
+        log.info("/user/list 分页查询的参数为: {} {} {}",
+                pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getIsBlack());
 
+        if (Objects.isNull(pageInfo.getPageNum()) ||
+                Objects.isNull(pageInfo.getPageSize())) {
+            return Result.error("分页参数错误");
+        }
+        Page<Userinfo> page = userinfoService.listByPage(pageInfo);
+        return Result.success(page);
+    }
 
     @GetMapping("/wxImg")
-    public Result wxImg(@RequestParam String userid){
+    public Result wxImg(@RequestParam String userid) {
         if (Objects.isNull(userid))
             return Result.error("请求参数错误");
         Userinfo userinfo = userinfoService.getById(userid);
-        if(Objects.isNull(userinfo))
+        if (Objects.isNull(userinfo))
             return Result.error("请求参数不存在");
         return Result.success(userinfo.getUserWxImg());
     }
 
     @PostMapping("/byuserid")
-    public Result getByUserId(@RequestBody Userinfo user){
+    public Result getByUserId(@RequestBody Userinfo user) {
         Userinfo userinfo = userinfoService.getById(user);
         userinfo.setUsername(sensitiveWordBs.replace(userinfo.getUsername()));
         return Result.success(userinfo);
     }
 
     @PostMapping("/byopenid")
-    public Result getByOpenId(@RequestBody Userinfo user){
+    public Result getByOpenId(@RequestBody Userinfo user) {
         LambdaQueryWrapper<Userinfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Userinfo::getOpenid, user.getOpenid());
         Userinfo userinfo = userinfoService.getOne(wrapper);
@@ -73,7 +88,7 @@ public class UserinfoController {
 
 
     @PostMapping("/login")
-    public Result login(@RequestParam String code){
+    public Result login(@RequestParam String code) {
         log.info("code:{}", code);
         // 发起get请求 获取微信一键登录需要的值
         var wxResult = WxLogin(code);
@@ -86,17 +101,17 @@ public class UserinfoController {
     }
 
     @PostMapping("/update")
-    public Result update(@RequestBody Userinfo user){
+    public Result update(@RequestBody Userinfo user) {
         log.info("传入的需要修改的数据为: {}", user);
         userinfoService.updateById(user);
         return Result.success("success");
     }
 
-    private WxResult WxLogin(String code){
+    private WxResult WxLogin(String code) {
         // 创建HttpClient实例
         CloseableHttpClient httpClient = HttpClients.createDefault();
         String apiUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=wxbc78397b3ae22e5b&" +
-                "secret="+AppSecret+"&js_code="+code+"&grant_type=authorization_code";
+                "secret=" + AppSecret + "&js_code=" + code + "&grant_type=authorization_code";
         HttpGet httpGet = new HttpGet(apiUrl);
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             int statusCode = response.getStatusLine().getStatusCode();
@@ -112,7 +127,6 @@ public class UserinfoController {
 
 
     }
-
 
 
 }

@@ -1,6 +1,9 @@
 package yirc.mygoschool.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import yirc.mygoschool.Dto.PageInfoUser;
 import yirc.mygoschool.common.WxResult;
+import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.domain.Userinfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserinfoService extends IService<Userinfo> {
 
     Userinfo getByOpenId(WxResult wxResult);
+
+    Page<Userinfo> listByPage(PageInfoUser pageInfo);
+
 }

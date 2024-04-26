@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 /**
  * @Version v1.0
  * @DateTime 2024/3/1 15:30
- * @Description TODO
+ * @Description 拼车控制器
  * @Author 一见如初
  */
 @Slf4j
@@ -208,7 +208,7 @@ public class CarShareOrderController {
         String template_id = TemplateId;
         //订阅消息内容组装
         SubscribeDataBean bean = new SubscribeDataBean();
-        bean.setThing1(new SubscribeDataBean.Thing1("mygoSchool"));
+        bean.setThing1(new SubscribeDataBean.Thing1("栀子花墙"));
         bean.setThing2(new SubscribeDataBean.Thing2("您发布的拼车已被接受"));
         LocalDateTime now = LocalDateTime.now();
         String format = now.format(DateTimeFormatter.ofPattern("yyyy年M月d日 HH:mm"));

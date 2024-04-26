@@ -1,5 +1,7 @@
 package yirc.mygoschool.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import yirc.mygoschool.Dto.PageInfoFeedback;
 import yirc.mygoschool.domain.Feekback;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface FeekbackService extends IService<Feekback> {
 
+    Page<Feekback> listByPage(PageInfoFeedback pageInfo);
 }
