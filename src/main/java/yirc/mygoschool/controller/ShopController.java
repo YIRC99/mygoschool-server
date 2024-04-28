@@ -116,16 +116,7 @@ public class ShopController {
     @PostMapping("/search/{targetArr}")
     public Result search(@PathVariable("targetArr") String[] target) {
         log.info("/search/${target} 搜索的参数为: {}", target);
-        LambdaQueryWrapper<Shop> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Shop::getIsdelete, 0)
-                .eq(Shop::getStatus, 0);
-        wrapper.and(w -> {
-            for (String t : target) {
-                w.or().like(Shop::getDetail, t);
-            }
-        });
-
-        List<Shop> list = shopService.list(wrapper);
+        List<Shop> list = shopService.Search(target);
         return Result.success(list);
     }
 
@@ -136,8 +127,8 @@ public class ShopController {
         wrapper.eq(Shop::getCreateuserid, user.getOpenid())
                 .orderByDesc(Shop::getCreateAt)
                 .eq(Shop::getIsdelete,0);
-
-        return Result.success(shopService.list(wrapper));
+        List<Shop> list = shopService.byUserId(user.getOpenid());
+        return Result.success(list);
     }
 
     @PostMapping("/update")

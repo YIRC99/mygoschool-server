@@ -65,6 +65,13 @@
             <version>1.2.76</version>
         </dependency>
 
+<!--        序列化对象时涉及到 Java 8 的日期/时间类型 java.time.LocalDate，但默认情况下 Jackson 不支持这种类型-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.2</version>
+        </dependency>
+
         <!-- 配置文件内容加密-->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>

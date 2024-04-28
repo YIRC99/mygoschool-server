@@ -8,7 +8,9 @@ import org.jasypt.util.text.StrongTextEncryptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import yirc.mygoschool.common.Result;
 
 @Slf4j
 @SpringBootApplication
@@ -18,7 +20,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class MygoSchoolApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MygoSchoolApplication.class, args);
+        ApplicationContext ctx = SpringApplication.run(MygoSchoolApplication.class, args);
+        Result.setApplicationContext(ctx);
         System.out.println(" __   __   ___    ____      ____     ___    ___      ");
         System.out.println(" \\ \\ / /  |_ _|  |  _ \\   / ___|   / _ \\   / _ \\   ");
         System.out.println("  \\ V /    | |   | |_) |  | |      | (_)|  | (_)|   ");

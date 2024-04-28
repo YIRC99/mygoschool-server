@@ -26,8 +26,7 @@ public class FeekbackServiceImpl extends ServiceImpl<FeekbackMapper, Feekback>
         wrapper.eq(pageInfo.getReportType() != null, Feekback::getReportType, pageInfo.getReportType())
                 .eq(pageInfo.getStatus() != null,Feekback::getStatus, pageInfo.getStatus())
                 .orderByDesc(Feekback::getCreateat);
-        Page<Feekback> feekbackPage = this.page(page, wrapper);
-        return feekbackPage;
+        return this.page(page, wrapper);
     }
 }
 

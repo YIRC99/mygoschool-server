@@ -5,6 +5,8 @@ import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.domain.Shop;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author 一见如初
 * @description 针对表【shop】的数据库操作Service
@@ -15,4 +17,8 @@ public interface ShopService extends IService<Shop> {
     boolean SaveWeChatImg(Shop shop);
 
     Page<Shop> listByPage(PageInfoShop pageInfo);
+
+    List<Shop> Search(String[] target);
+
+    List<Shop> byUserId(String openid);
 }

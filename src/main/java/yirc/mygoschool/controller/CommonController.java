@@ -152,10 +152,10 @@ public class CommonController {
      */
     private void VirtualIsNSFW(String resultPath) {
         // 提前取出来因为ThreadLocal切换线程之后报出的值会丢失
-        String currentUUID = BaseContext.getCurrentUUID();
+        String currentUserId = BaseContext.getCurrentUserId();
         Thread.ofVirtual().start(() -> {
             try {
-                myNSFW.isNSFW(resultPath,currentUUID);
+                myNSFW.isNSFW(resultPath,currentUserId);
             } catch (IOException e) {
                 throw new CustomException("处理"+resultPath+"图片时出错"+e.getMessage());
             }

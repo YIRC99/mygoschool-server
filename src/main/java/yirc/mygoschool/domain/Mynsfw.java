@@ -5,6 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 
 /**
@@ -17,20 +23,17 @@ public class Mynsfw implements Serializable {
     /**
      * 
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId
     private Long id;
 
     /**
      * 
      */
-    @TableField(value = "postUserOpenId")
     private String postuseropenid;
 
     /**
-     *
      * 
      */
-    @TableField(value = "imgPath")
     private String imgpath;
 
     /**
@@ -38,8 +41,16 @@ public class Mynsfw implements Serializable {
      */
     private Integer status;
 
-    @TableField(value = "score")
+    /**
+     * nsfw分数
+     */
     private Double score;
+
+    @TableField(value = "createAt")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime createAt;
+
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

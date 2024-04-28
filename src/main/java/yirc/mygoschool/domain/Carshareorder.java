@@ -10,6 +10,12 @@ import java.time.LocalTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import lombok.Data;
 
 /**
@@ -61,6 +67,8 @@ public class Carshareorder implements Serializable {
     /**
      * 出发日期时间
      */
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime startdatetime;
 
     /**
@@ -89,6 +97,8 @@ public class Carshareorder implements Serializable {
     /**
      * 订单接受时间
      */
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime receivedatetime;
 
     /**
@@ -100,6 +110,8 @@ public class Carshareorder implements Serializable {
      * 提前时间
      */
     @JsonFormat(pattern = "HH:mm")
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime beforetime;
 
     /**
@@ -111,6 +123,8 @@ public class Carshareorder implements Serializable {
      * 延后时间
      */
     @JsonFormat(pattern = "HH:mm")
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime aftertime;
 
     /**
@@ -129,9 +143,13 @@ public class Carshareorder implements Serializable {
     /**
      * 
      */
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createat;
 
     @TableField(value = "updateAt")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime updateAt;
 
     @TableField(value = "isDelete")

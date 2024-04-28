@@ -58,7 +58,7 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         String token = request.getHeader("Authorization");
         String userId = request.getHeader("UserId"); // TODO 之后这个userid从jwt里面取
         // 当前请求的userId 用来识别当前请求是谁
-        BaseContext.setCurrentUUID(userId);
+        BaseContext.setCurrentUserId(userId);
 
         // TODO 前后端通讯加密
 

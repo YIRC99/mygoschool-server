@@ -6,11 +6,11 @@ package yirc.mygoschool.Utils;
 public class BaseContext {
     private static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
 
-    public static void setCurrentUUID(String uuid){
-        threadLocal.set(uuid);
+    public static void setCurrentUserId(String userId){
+        threadLocal.set(userId);
     }
 
-    public static String getCurrentUUID(){
+    public static String getCurrentUserId(){
         return threadLocal.get();
     }
 

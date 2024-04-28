@@ -1,5 +1,6 @@
 package yirc.mygoschool.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,16 +16,17 @@ import org.springframework.stereotype.Service;
 import yirc.mygoschool.service.UserinfoService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
-* @author 一见如初
-* @description 针对表【shop】的数据库操作Service实现
-* @createDate 2024-04-01 23:59:29
-*/
+ * @author 一见如初
+ * @description 针对表【shop】的数据库操作Service实现
+ * @createDate 2024-04-01 23:59:29
+ */
 @Service
 public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop>
-    implements ShopService{
+        implements ShopService {
 
     @Autowired
     private UserinfoService userinfoService;
@@ -34,7 +36,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop>
 
     @Override
     public boolean SaveWeChatImg(Shop shop) {
-        if(Objects.isNull(shop.getWechatimg())) return false;
+        if (Objects.isNull(shop.getWechatimg())) return false;
         LambdaUpdateWrapper<Userinfo> query = new LambdaUpdateWrapper<>();
         query.eq(Userinfo::getOpenid, shop.getCreateuserid())
                 .set(Userinfo::getUserWxImg, shop.getWechatimg());
@@ -46,7 +48,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop>
         Page<Shop> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
         LambdaUpdateWrapper<Shop> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(Shop::getIsdelete, 0)
-                .eq(Shop::getStatus,0); //这个状态0在售 1下架
+                .eq(Shop::getStatus, 0); //这个状态0在售 1下架
         wrapper.gt(Shop::getCancelTime, LocalDateTime.now());
         wrapper.orderByDesc(Shop::getCreateAt);
         wrapper.in(Shop::getAddress, pageInfo.getAddressCodeArr());
@@ -58,6 +60,36 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop>
         });
 
         return pageinfo;
+    }
+
+    @Override
+    public List<Shop> Search(String[] target) {
+        LambdaQueryWrapper<Shop> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Shop::getIsdelete, 0)
+                .eq(Shop::getStatus, 0);
+        wrapper.and(w -> {
+            for (String t : target) {
+                w.or().like(Shop::getDetail, t);
+            }
+        });
+        List<Shop> list = this.list(wrapper);
+        list.forEach(shop -> {
+            shop.setDetail(sensitiveWordBs.replace(shop.getDetail()));
+        });
+        return list;
+    }
+
+    @Override
+    public List<Shop> byUserId(String openid) {
+        LambdaQueryWrapper<Shop> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Shop::getCreateuserid, openid)
+                .orderByDesc(Shop::getCreateAt)
+                .eq(Shop::getIsdelete,0);
+        List<Shop> list = this.list(wrapper);
+        list.forEach(shop -> {
+            shop.setDetail(sensitiveWordBs.replace(shop.getDetail()));
+        });
+        return list;
     }
 }
 
