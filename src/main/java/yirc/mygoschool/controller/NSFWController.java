@@ -66,13 +66,19 @@ public class NSFWController {
         return mynsfwService.recover(mynsfw);
     }
 
+    /**
+     * 标记图片为正常图片
+     */
     @PostMapping("/fine")
     public Result fine(@RequestBody Mynsfw mynsfw){
         if(Objects.isNull(mynsfw.getId())){
             return Result.error("参数错误");
         }
-        mynsfw.setStatus(1);
-        mynsfwService.updateById(mynsfw);
+        Mynsfw byId = mynsfwService.getById(mynsfw);
+        if(byId.getStatus() != 0)
+            return Result.error("图片状态错误,无法标记");
+        byId.setStatus(1);
+        mynsfwService.updateById(byId);
         return Result.success("标记成功");
     }
 

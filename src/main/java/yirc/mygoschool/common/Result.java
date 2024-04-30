@@ -29,35 +29,64 @@ public class Result implements Serializable {
         result.setData(data);
         result.setMessage("成功");
         // 数据加密
+        String text = null;
         try {
-//            var text = myUtil.encrypt(data);
+            text = myUtil.encrypt(data);
         } catch (Exception e) {
             log.error("数据加密报错 请联系开发者"+ e.getMessage());
             return Result.error("数据放回报错 请联系开发者");
         }
+        result.setData(text);
         return result;
     }
 
     public static Result success(Object data, Integer code) {
+        MyUtil myUtil = context.getBean(MyUtil.class);
         Result result = new Result();
+        // 数据加密
+        String text = null;
+        try {
+            text = myUtil.encrypt(data);
+        } catch (Exception e) {
+            log.error("数据加密报错 请联系开发者"+ e.getMessage());
+            return Result.error("数据放回报错 请联系开发者");
+        }
+        result.setData(text);
         result.setCode(code);
-        result.setData(data);
         result.setMessage("成功");
         return result;
     }
 
     public static Result error(String message){
+        MyUtil myUtil = context.getBean(MyUtil.class);
         Result result = new Result();
+        // 数据加密
+        String text = null;
+        try {
+            text = myUtil.encrypt(message);
+        } catch (Exception e) {
+            log.error("数据加密报错 请联系开发者"+ e.getMessage());
+            return Result.error("数据放回报错 请联系开发者");
+        }
         result.setCode(ResultCode.ERROR);
-        result.setData(message);
+        result.setData(text);
         result.message = message;
         return result;
     }
 
     public static Result error(String message, Integer code){
+        MyUtil myUtil = context.getBean(MyUtil.class);
         Result result = new Result();
+        // 数据加密
+        String text = null;
+        try {
+            text = myUtil.encrypt(message);
+        } catch (Exception e) {
+            log.error("数据加密报错 请联系开发者"+ e.getMessage());
+            return Result.error("数据放回报错 请联系开发者");
+        }
         result.setCode(code);
-        result.setData(null);
+        result.setData(text);
         result.message = message;
         return result;
     }

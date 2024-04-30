@@ -61,12 +61,13 @@ mybatis-plus:
 yirc99:
   WxSecret: ENC(l1rmqx/AVZns1uL1B8OEPP6Xh3byutznWDPS5FemCs55DAATJKkjoCq++odGy5gY)
   filePath: /src/main/resources/static/
-  pythonExePath: F:/GitHubCode/isNSFW/my-success_1/.venv10/Scripts/python.exe
 #  pythonExePath: /usr/bin/python310
 #  pythonPath: /home/yirc99/my-success/testWhile.py
+  pythonExePath: F:/GitHubCode/isNSFW/my-success_1/.venv10/Scripts/python.exe
   pythonPath: F:/GitHubCode/isNSFW/my-success_1/testWhile.py
   NSFWScore: 0.25 # 超过这个值，则认为图片可能为NSFW图片保存
   NSFWMaxScore: 0.75 # 超过这个值，则认为图片一定是NSFW图片 直接替换为违规图片
-  AESKey: authorYIRC99NoMisappropriation #AES 密钥 后期换一下加密掉
+  AESKey: sZi8knPmD0BmXth3Ds48zSwBRs6Ow993 #AES 密钥要求必须为32位
+  SEED: YourFixedSeedHere # 散列函数的固定随机种子
   Template:
     id: R0HVPNJRywpmvaA5xO6YWFfjLdGqcjWPB0-rqRkmkbk
