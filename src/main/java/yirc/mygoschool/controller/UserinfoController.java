@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.PageInfoUser;
+import yirc.mygoschool.Utils.MyUtil;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.common.WxResult;
 import yirc.mygoschool.domain.Shop;
@@ -25,6 +27,8 @@ import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.UserinfoService;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -46,6 +50,8 @@ public class UserinfoController {
 
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+    @Autowired
+    private MyUtil myUtil;
 
     @PostMapping("/page")
     public Result list(@RequestBody PageInfoUser pageInfo) {
@@ -86,7 +92,6 @@ public class UserinfoController {
         return Result.success(userinfo);
     }
 
-
     @PostMapping("/login")
     public Result login(@RequestParam String code) {
         log.info("code:{}", code);
@@ -95,6 +100,16 @@ public class UserinfoController {
         if (wxResult == null)
             return Result.error("一键登录失败");
         Userinfo user = userinfoService.getByOpenId(wxResult);
+
+        if(user.getToken() == null){
+            // 存储openid 生成jwt
+            Map<String, Object> mp = new HashMap<>();
+            mp.put("openId", user.getOpenid());
+            String jwt = myUtil.generateJwt(mp);
+            user.setToken(jwt);
+            userinfoService.updateById(user);
+        }
+
         log.warn("wxResult:{}", wxResult);
         user.setUsername(sensitiveWordBs.replace(user.getUsername()));
         return Result.success(user);

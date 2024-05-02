@@ -116,6 +116,7 @@ public class ShopController {
     @PostMapping("/search/{targetArr}")
     public Result search(@PathVariable("targetArr") String[] target) {
         log.info("/search/${target} 搜索的参数为: {}", target);
+        // TODO 搜索接口应该做一个分页 不然几千条直接爆内存
         List<Shop> list = shopService.Search(target);
         return Result.success(list);
     }

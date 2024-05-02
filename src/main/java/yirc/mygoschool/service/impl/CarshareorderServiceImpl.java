@@ -89,17 +89,27 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
                 if ("濂溪校区".equals(pageInfo.getStartAddName())) {
                     // TODO 这里加一个需求  如果目的地是九职大也算
                     wrapper.and(i -> i.like(Carshareorder::getStartaddressall, pageInfo.getStartAddName())
+                            .or().like(Carshareorder::getEndaddressall, pageInfo.getStartAddName())
                             .or().like(Carshareorder::getStartaddressall, "九江职业大学-北门")
-                            .or().like(Carshareorder::getStartaddressall, "九江职业大学新校区"));
+                            .or().like(Carshareorder::getEndaddressall, "九江职业大学-北门")
+                            .or().like(Carshareorder::getStartaddressall, "九江职业大学新校区")
+                            .or().like(Carshareorder::getEndaddressall, "九江职业大学新校区"));
                 } else if ("鹤问湖校区".equals(pageInfo.getStartAddName())) {
                     // TODO 这里加一个需求  如果目的地是九职大也算
-                    wrapper.like(Carshareorder::getStartaddressall, pageInfo.getStartAddName());
+                    wrapper.and(i -> i.like(Carshareorder::getStartaddressall, pageInfo.getStartAddName())
+                            .or().like(Carshareorder::getEndaddressall, pageInfo.getStartAddName()));
                 }
             } else {
+                //其他选项排除 出发地点
                 wrapper.notLike(Carshareorder::getStartaddressall, "濂溪校区");
+                wrapper.notLike(Carshareorder::getStartaddressall, "鹤问湖校区");
                 wrapper.notLike(Carshareorder::getStartaddressall, "九江职业大学-北门");
                 wrapper.notLike(Carshareorder::getStartaddressall, "九江职业大学新校区");
-                wrapper.notLike(Carshareorder::getStartaddressall, "鹤问湖校区");
+                //其他选项排除 目的点
+                wrapper.notLike(Carshareorder::getEndaddressall, "濂溪校区");
+                wrapper.notLike(Carshareorder::getEndaddressall, "鹤问湖校区");
+                wrapper.notLike(Carshareorder::getEndaddressall, "九江职业大学-北门");
+                wrapper.notLike(Carshareorder::getEndaddressall, "九江职业大学新校区");
             }
         }
 

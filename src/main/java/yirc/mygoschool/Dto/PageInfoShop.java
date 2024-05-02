@@ -14,4 +14,5 @@ import java.time.LocalDate;
 @Data
 public class PageInfoShop extends PageInfo {
     private Integer[] addressCodeArr;
+    private String[] target;
 }

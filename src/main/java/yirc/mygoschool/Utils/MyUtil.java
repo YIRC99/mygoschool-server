@@ -2,6 +2,9 @@ package yirc.mygoschool.Utils;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,6 +22,8 @@ import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Date;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
@@ -31,8 +36,36 @@ public class MyUtil {
     @Value("${yirc99.AESKey}") // 从配置文件中读取密钥
     private String aesKey;
 
+    @Value("${yirc99.JWTKey}")
+    private String JWTKey;
+
+    @Value("${yirc99.Expire}")
+    private Long Expire;
+
     @Value("${yirc99.SEED}") // 从配置文件中读取固定随机数种子
     private String SEED;
+
+    /**
+     * 生成jwt令牌
+     */
+    public String generateJwt(Map<String, Object> claims) {
+        return Jwts.builder()
+                .addClaims(claims)
+                .signWith(SignatureAlgorithm.HS256, JWTKey)
+                .setExpiration(new Date(System.currentTimeMillis() + Expire))
+                .compact();
+    }
+
+    /**
+     * 解析jwt令牌
+     */
+    public Claims parseJWT(String jwt) {
+        return Jwts.parser()
+                .setSigningKey(JWTKey)
+                .parseClaimsJws(jwt)
+                .getBody();
+    }
+
 
     //给你一个图片路径 将这个图片替换为空白图片但是不替换名称 覆盖掉
     public void replaceImg(String nsfwImgPath){

@@ -1,20 +1,26 @@
 package yirc.mygoschool.filter;
 
 import com.alibaba.fastjson.JSON;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.filter.GenericFilterBean;
 import yirc.mygoschool.Utils.BaseContext;
+import yirc.mygoschool.Utils.MyUtil;
 import yirc.mygoschool.common.Result;
+import yirc.mygoschool.common.ResultCode;
 
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -22,6 +28,9 @@ import java.util.Objects;
 @WebFilter(filterName = "LoginFilter", urlPatterns = "/*")
 @ControllerAdvice
 public class LoginFilter extends GenericFilterBean implements Filter {
+
+    @Autowired
+    private MyUtil myUtil;
 
     public static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
 
@@ -32,13 +41,14 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         response.setContentType("application/json;charset=UTF-8");// 设置返回值字符编码
         log.info("请求的路径为: {}", request.getRequestURL());
-        // 配置不需要
+        // 配置不需要验证token的请求
         String[] urls = new String[]{
                 "/user/login",
-                "/user/register",
-                "/static/images/*",
-                "/static/avatar/*",
-                "/common/download/*",
+                "/shop/page",
+                "/shop/search/**",
+                "/carshareorder/page",
+                "/affiche",
+                "/common/download",
                 "/doc.html",            //设置swagger不被拦截
                 "/webjars/**",          //设置swagger的配置
                 "/swagger-resources",   //设置swagger的配置
@@ -53,31 +63,41 @@ public class LoginFilter extends GenericFilterBean implements Filter {
                 return;
             }
         }
-        // 获取请求的header里面的token
-        // 未来可以在jwt里面设置UserId
+
+        //查询
         String token = request.getHeader("Authorization");
-        String userId = request.getHeader("UserId"); // TODO 之后这个userid从jwt里面取
+        log.info("拿到的token值为: {}", token);
+        if (Objects.isNull(token)) {
+            // 没有token，返回未授权状态码
+            response.getWriter().write(JSON.toJSONString(Result.error("token 为空")));
+            return;
+        }
+
+        Map<String, Object> claims = null;
+        try {
+            claims = myUtil.parseJWT(token);
+        }catch (SignatureException e) {
+            // 解析失败
+            response.getWriter().write(JSON.toJSONString(
+                    Result.error("token 签名无效 请重新登录", ResultCode.USER_NOT_LOGIN)));
+            return;
+        } catch (ExpiredJwtException e) {
+            // 解析失败
+            response.getWriter().write(JSON.toJSONString(
+                    Result.error("token jwt令牌超时 请重新登录", ResultCode.USER_NOT_LOGIN)));
+            return;
+        } catch (Exception e) {
+            // 解析失败
+            response.getWriter().write(JSON.toJSONString(
+                    Result.error("token 解析失败 请重新登录", ResultCode.USER_NOT_LOGIN)));
+            return;
+        }
+
         // 当前请求的userId 用来识别当前请求是谁
+        String userId = (String)claims.get("UserId");
         BaseContext.setCurrentUserId(userId);
 
-        // TODO 前后端通讯加密
-
-        // TODO token验证
-
-//        // 不是登录和注册的请求需要验证token
-//        String token = request.getHeader("Authorization");
-//        log.info("拿到的token值为: {}", token);
-//        if (Objects.isNull(token)) {
-//            // 没有token，返回未授权状态码
-//            response.getWriter().write(JSON.toJSONString(Result.error("token 为空")));
-//            return;
-//        }
-
-
         chain.doFilter(req, res);
-
-
-
     }
 
 

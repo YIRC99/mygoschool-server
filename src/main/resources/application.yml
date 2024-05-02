@@ -68,6 +68,8 @@ yirc99:
   NSFWScore: 0.25 # 超过这个值，则认为图片可能为NSFW图片保存
   NSFWMaxScore: 0.75 # 超过这个值，则认为图片一定是NSFW图片 直接替换为违规图片
   AESKey: sZi8knPmD0BmXth3Ds48zSwBRs6Ow993 #AES 密钥要求必须为32位
+  JWTKey: javaWebHomeWorkAuthorYIRC99/javaWebHomeWorkAuthorYIRC99/javaWebHomeWorkAuthorYIRC99
+  Expire: 3153600000000 #JWT 的配置有效时间为 100年
   SEED: YourFixedSeedHere # 散列函数的固定随机种子
   Template:
     id: R0HVPNJRywpmvaA5xO6YWFfjLdGqcjWPB0-rqRkmkbk
