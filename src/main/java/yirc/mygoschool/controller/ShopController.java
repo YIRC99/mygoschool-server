@@ -18,6 +18,7 @@ import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.ShopService;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -113,12 +114,11 @@ public class ShopController {
         return Result.success(page);
     }
 
-    @PostMapping("/search/{targetArr}")
-    public Result search(@PathVariable("targetArr") String[] target) {
-        log.info("/search/${target} 搜索的参数为: {}", target);
-        // TODO 搜索接口应该做一个分页 不然几千条直接爆内存
-        List<Shop> list = shopService.Search(target);
-        return Result.success(list);
+    @PostMapping("/search")
+    public Result search(@RequestBody PageInfoShop pageInfo) {
+        log.info("/search/ 搜索的参数为: {}", Arrays.toString(pageInfo.getTarget()));
+        Page<Shop> page = shopService.Search(pageInfo);
+        return Result.success(page);
     }
 
     @PostMapping("/byUserId")

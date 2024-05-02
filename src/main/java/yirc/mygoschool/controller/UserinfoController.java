@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import io.jsonwebtoken.Claims;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.PageInfoUser;
 import yirc.mygoschool.Utils.MyUtil;
@@ -50,8 +52,66 @@ public class UserinfoController {
 
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private MyUtil myUtil;
+
+    //TODO admin登录接口
+    @PostMapping("/admin/login")
+    public Result adminLogin(@RequestBody Map<String, String> map){
+        // TODO 设计 单次登录的jwt 在redis中维护一个count值 然后生成jwt的保存这个count
+        // 每一次使用jwt 就让count++ 然后制作一个新的jwt 其中携带新的count值
+        // 每一次解密出来之后 还需要验证count值 只有值一致 才能使用 以此来防止盗用
+
+        String username = map.get("username");
+        String password = map.get("password");
+        if(username.equals("admin") && password.equals("123456")){
+            return Result.success("登录成功");
+        }
+        return Result.error("登录失败");
+    }
+
+    @PostMapping("/black")
+    @Transactional
+    public Result blackUser(@RequestBody Userinfo user){
+        if(Objects.isNull(user.getUserid())){
+            return Result.error("请求参数错误: id为空");
+        }
+
+        Userinfo byId = userinfoService.getById(user);
+        if(Objects.isNull(byId)){
+            return Result.error("该用户不存在");
+        }
+        String key = "userBlack:" + byId.getOpenid();
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(key)) || byId.getIsblack() == 1){
+            return Result.error("该用户已被拉黑");
+        }
+        redisTemplate.opsForValue().set(key, "blacked");
+        user.setIsblack(1);
+        userinfoService.updateById(user);
+        return Result.success("拉黑成功");
+    }
+
+    @PostMapping("/white")
+    @Transactional
+    public Result whiteUser(@RequestBody Userinfo user){
+        if(Objects.isNull(user.getUserid())){
+            return Result.error("请求参数错误: id为空");
+        }
+        Userinfo byId = userinfoService.getById(user);
+        if(Objects.isNull(byId)){
+            return Result.error("该用户不存在");
+        }
+        String key = "userBlack:" + user.getOpenid();
+        if (Boolean.FALSE.equals(redisTemplate.hasKey(key)) || byId.getIsblack() == 0){
+            return Result.error("该用户未在黑名单中");
+        }
+        redisTemplate.delete(key);
+        user.setIsblack(0);
+        userinfoService.updateById(user);
+        return Result.success("成功移除黑名单");
+    }
 
     @PostMapping("/page")
     public Result list(@RequestBody PageInfoUser pageInfo) {

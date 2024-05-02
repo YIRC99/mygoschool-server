@@ -58,35 +58,17 @@ public class Result implements Serializable {
     }
 
     public static Result error(String message){
-        MyUtil myUtil = context.getBean(MyUtil.class);
         Result result = new Result();
-        // 数据加密
-        String text = null;
-        try {
-            text = myUtil.encrypt(message);
-        } catch (Exception e) {
-            log.error("数据加密报错 请联系开发者"+ e.getMessage());
-            return Result.error("数据放回报错 请联系开发者");
-        }
         result.setCode(ResultCode.ERROR);
-        result.setData(text);
+        result.setData(message);
         result.message = message;
         return result;
     }
 
     public static Result error(String message, Integer code){
-        MyUtil myUtil = context.getBean(MyUtil.class);
         Result result = new Result();
-        // 数据加密
-        String text = null;
-        try {
-            text = myUtil.encrypt(message);
-        } catch (Exception e) {
-            log.error("数据加密报错 请联系开发者"+ e.getMessage());
-            return Result.error("数据放回报错 请联系开发者");
-        }
         result.setCode(code);
-        result.setData(text);
+        result.setData(message);
         result.message = message;
         return result;
     }

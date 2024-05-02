@@ -18,7 +18,7 @@ public interface ShopService extends IService<Shop> {
 
     Page<Shop> listByPage(PageInfoShop pageInfo);
 
-    List<Shop> Search(String[] target);
+    Page<Shop> Search(PageInfoShop pageInfo);
 
     List<Shop> byUserId(String openid);
 }

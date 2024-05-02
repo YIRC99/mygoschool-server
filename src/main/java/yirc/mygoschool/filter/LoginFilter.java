@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.filter.GenericFilterBean;
@@ -27,6 +28,7 @@ import java.util.Objects;
 @Slf4j
 @WebFilter(filterName = "LoginFilter", urlPatterns = "/*")
 @ControllerAdvice
+@Order(1)
 public class LoginFilter extends GenericFilterBean implements Filter {
 
     @Autowired
@@ -45,7 +47,7 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         String[] urls = new String[]{
                 "/user/login",
                 "/shop/page",
-                "/shop/search/**",
+                "/shop/search",
                 "/carshareorder/page",
                 "/affiche",
                 "/common/download",
@@ -69,7 +71,7 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         log.info("拿到的token值为: {}", token);
         if (Objects.isNull(token)) {
             // 没有token，返回未授权状态码
-            response.getWriter().write(JSON.toJSONString(Result.error("token 为空")));
+            response.getWriter().write(JSON.toJSONString(Result.error("token 为空",ResultCode.TOKEN_IS_NULL)));
             return;
         }
 
@@ -79,23 +81,23 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         }catch (SignatureException e) {
             // 解析失败
             response.getWriter().write(JSON.toJSONString(
-                    Result.error("token 签名无效 请重新登录", ResultCode.USER_NOT_LOGIN)));
+                    Result.error("token 签名无效 请重新登录", ResultCode.TOKEN_ERROR)));
             return;
         } catch (ExpiredJwtException e) {
             // 解析失败
             response.getWriter().write(JSON.toJSONString(
-                    Result.error("token jwt令牌超时 请重新登录", ResultCode.USER_NOT_LOGIN)));
+                    Result.error("token jwt令牌超时 请重新登录", ResultCode.TOKEN_TIMEOUT)));
             return;
         } catch (Exception e) {
             // 解析失败
             response.getWriter().write(JSON.toJSONString(
-                    Result.error("token 解析失败 请重新登录", ResultCode.USER_NOT_LOGIN)));
+                    Result.error("token 解析失败 请重新登录", ResultCode.TOKEN_ERROR)));
             return;
         }
 
         // 当前请求的userId 用来识别当前请求是谁
-        String userId = (String)claims.get("UserId");
-        BaseContext.setCurrentUserId(userId);
+        String openId = (String)claims.get("openId");
+        BaseContext.setCurrentUserId(openId);
 
         chain.doFilter(req, res);
     }

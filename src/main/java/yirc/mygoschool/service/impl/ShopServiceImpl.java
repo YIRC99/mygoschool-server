@@ -63,20 +63,22 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop>
     }
 
     @Override
-    public List<Shop> Search(String[] target) {
+    public Page<Shop> Search(PageInfoShop pageInfo) {
+        Page<Shop> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
+
         LambdaQueryWrapper<Shop> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Shop::getIsdelete, 0)
                 .eq(Shop::getStatus, 0);
         wrapper.and(w -> {
-            for (String t : target) {
+            for (String t : pageInfo.getTarget()) {
                 w.or().like(Shop::getDetail, t);
             }
         });
-        List<Shop> list = this.list(wrapper);
-        list.forEach(shop -> {
+        Page<Shop> pageinfo = this.page(page, wrapper);
+        pageinfo.getRecords().forEach(shop -> {
             shop.setDetail(sensitiveWordBs.replace(shop.getDetail()));
         });
-        return list;
+        return pageinfo;
     }
 
     @Override
