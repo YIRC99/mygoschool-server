@@ -41,7 +41,7 @@ public class CommonController {
     // 返回AESKey
     @PostMapping("/AESKey")
     public Result getAESKey() {
-        return Result.success(aesKey);
+        return Result.success(aesKey,false);
     }
 
     // 下载图片

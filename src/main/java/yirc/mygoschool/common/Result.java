@@ -40,6 +40,29 @@ public class Result implements Serializable {
         return result;
     }
 
+    // 重载一个可选加密的方法
+    public static Result success(Object data,boolean isEncrypt) {
+        Result result = new Result();
+        result.setCode(ResultCode.SUCCESS);
+        result.setData(data);
+        result.setMessage("成功");
+        if(!isEncrypt){
+            return result;
+        }
+        MyUtil myUtil = context.getBean(MyUtil.class);
+        // 数据加密
+        String text = null;
+        try {
+            text = myUtil.encrypt(data);
+        } catch (Exception e) {
+            log.error("数据加密报错 请联系开发者"+ e.getMessage());
+            return Result.error("数据放回报错 请联系开发者");
+        }
+        result.setData(text);
+        return result;
+    }
+
+
     public static Result success(Object data, Integer code) {
         MyUtil myUtil = context.getBean(MyUtil.class);
         Result result = new Result();

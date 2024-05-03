@@ -48,6 +48,7 @@ public class AdminFilter extends GenericFilterBean implements Filter {
                 "/user/white",
                 "/affiche/add",
                 "/sensitive",
+                "/sensitive/**",
                 "/nsfw/**"
         };
 

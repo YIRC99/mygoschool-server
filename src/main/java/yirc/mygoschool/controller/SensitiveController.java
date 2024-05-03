@@ -38,7 +38,7 @@ public class SensitiveController {
     }
 
     // 修改所有违规词
-    @PostMapping
+    @PostMapping("/update")
     public Result update(@RequestBody Mysensitive mysensitive){
         boolean result = mysensitiveService.updateById(mysensitive);
         if (!result)return Result.error("修改失败");
@@ -54,7 +54,7 @@ public class SensitiveController {
         return Result.success(result);
     }
 
-    @PostMapping
+    @PostMapping("/refresh")
     public Result myRefresh(){
         sensitiveWordService.refresh();
         return Result.success("重置成功");
