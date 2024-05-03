@@ -48,6 +48,7 @@ public class LoginFilter extends GenericFilterBean implements Filter {
                 "/user/login",
                 "/user/admin/login",
                 "/shop/page",
+                "/common/AESKey",
                 "/shop/search",
                 "/carshareorder/page",
                 "/affiche",

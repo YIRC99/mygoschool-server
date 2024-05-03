@@ -35,6 +35,14 @@ public class CommonController {
     @Autowired
     private MyNSFW myNSFW;
 
+    @Value("${yirc99.AESKey}") // 从配置文件中读取密钥
+    private String aesKey;
+
+    // 返回AESKey
+    @PostMapping("/AESKey")
+    public Result getAESKey() {
+        return Result.success(aesKey);
+    }
 
     // 下载图片
     @GetMapping("/download")
