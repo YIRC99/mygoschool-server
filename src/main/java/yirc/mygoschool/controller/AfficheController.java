@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @Slf4j
-@RequestMapping("affiche")
+@RequestMapping("/affiche")
 public class AfficheController {
 
     @Autowired

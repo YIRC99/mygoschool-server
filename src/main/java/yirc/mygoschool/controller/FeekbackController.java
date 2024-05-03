@@ -50,9 +50,4 @@ public class FeekbackController {
         return Result.success(page);
     }
 
-
-
-
-
-
 }

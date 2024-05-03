@@ -6,7 +6,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -42,8 +45,24 @@ public class MyUtil {
     @Value("${yirc99.Expire}")
     private Long Expire;
 
-    @Value("${yirc99.SEED}") // 从配置文件中读取固定随机数种子
-    private String SEED;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    /**
+     * 校验密码
+     */
+    public boolean checkPassword(String rawPassword, String hashedPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(rawPassword, hashedPassword);
+    }
+
+    /**
+     * 对密码进行加密
+     */
+    public String encode(String password) {
+        return passwordEncoder.encode(password);
+    }
 
     /**
      * 生成jwt令牌
@@ -53,6 +72,18 @@ public class MyUtil {
                 .addClaims(claims)
                 .signWith(SignatureAlgorithm.HS256, JWTKey)
                 .setExpiration(new Date(System.currentTimeMillis() + Expire))
+                .compact();
+    }
+
+    /**
+     * 生成jwt令牌
+     * @Param expire 令牌过期时间
+     */
+    public String generateJwt(Map<String, Object> claims,Long expire) {
+        return Jwts.builder()
+                .addClaims(claims)
+                .signWith(SignatureAlgorithm.HS256, JWTKey)
+                .setExpiration(new Date(System.currentTimeMillis() + expire))
                 .compact();
     }
 

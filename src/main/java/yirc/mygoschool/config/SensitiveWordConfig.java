@@ -54,7 +54,7 @@ public class SensitiveWordConfig {
                 .enableEmailCheck(true)//enableEmailCheck	是有启用邮箱检测
                 .enableUrlCheck(true)//enableUrlCheck	是否启用链接检测
                 .enableWordCheck(true)//enableWordCheck	是否启用敏感单词检测
-                .numCheckLen(8)//numCheckLen	数字检测，自定义指定长度
+                .numCheckLen(15)//numCheckLen	数字检测，自定义指定长度
                 .wordTag(WordTags.none())//wordTag	词对应的标签
                 .charIgnore(SensitiveWordCharIgnores.defaults())//charIgnore	忽略的字符
                 .wordResultCondition(WordResultConditions.alwaysTrue())//wordResultCondition 针对匹配的敏感词额外加工，比如可以限制英文单词必须全匹配

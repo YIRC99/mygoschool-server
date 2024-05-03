@@ -57,19 +57,23 @@ public class UserinfoController {
     @Autowired
     private MyUtil myUtil;
 
-    //TODO admin登录接口
+    // admin登录接口
     @PostMapping("/admin/login")
     public Result adminLogin(@RequestBody Map<String, String> map){
-        // TODO 设计 单次登录的jwt 在redis中维护一个count值 然后生成jwt的保存这个count
-        // 每一次使用jwt 就让count++ 然后制作一个新的jwt 其中携带新的count值
-        // 每一次解密出来之后 还需要验证count值 只有值一致 才能使用 以此来防止盗用
-
         String username = map.get("username");
         String password = map.get("password");
-        if(username.equals("admin") && password.equals("123456")){
-            return Result.success("登录成功");
-        }
-        return Result.error("登录失败");
+        if(Objects.isNull(password) || Objects.isNull(username)) return Result.error("账号或密码错误");
+        Userinfo byId = userinfoService.getById(2022020926);
+        boolean flag = myUtil.checkPassword(password, byId.getAvatar());
+        if(!flag) return Result.error("账号或密码错误");
+        //  登录成功之后 成一个JWT令牌 令牌时间30分钟过期 不纯在任何地方
+        Map<String, Object> mp = new HashMap<>();
+        mp.put("openId", byId.getOpenid());
+        //  然后将特殊的userid存在jwt令牌里面 在filter中对 固定的请求进行过滤
+        String jwt = myUtil.generateJwt(mp, 30 * 60 * 1000L);
+        String key = "adminJWT:"+byId.getOpenid();
+        redisTemplate.opsForValue().set(key,jwt);
+        return Result.success(jwt);
     }
 
     @PostMapping("/black")

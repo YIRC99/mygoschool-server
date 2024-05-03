@@ -46,6 +46,7 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         // 配置不需要验证token的请求
         String[] urls = new String[]{
                 "/user/login",
+                "/user/admin/login",
                 "/shop/page",
                 "/shop/search",
                 "/carshareorder/page",

@@ -26,7 +26,7 @@ public class SensitiveController {
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
 
-
+    // 用来测试的违规词的接口  没啥用
     @PostMapping("/test")
     public Result test(@RequestBody Map<String,String> obj){
         String result = sensitiveWordBs.replace(obj.get("text"));
@@ -36,8 +36,6 @@ public class SensitiveController {
 
     @PostMapping
     public Result myRefresh(){
-        // TODO 这个接口使用来刷新敏感词的 但是必须只有我才能 不然就可以一直耍我的接口
-        // 后期必须加上唯一密码
         sensitiveWordService.refresh();
         return Result.success("重置成功");
     }

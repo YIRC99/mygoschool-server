@@ -67,9 +67,8 @@ yirc99:
   pythonPath: F:/GitHubCode/isNSFW/my-success_1/testWhile.py
   NSFWScore: 0.25 # 超过这个值，则认为图片可能为NSFW图片保存
   NSFWMaxScore: 0.75 # 超过这个值，则认为图片一定是NSFW图片 直接替换为违规图片
-  AESKey: sZi8knPmD0BmXth3Ds48zSwBRs6Ow993 #AES 密钥要求必须为32位
-  JWTKey: javaWebHomeWorkAuthorYIRC99/javaWebHomeWorkAuthorYIRC99/javaWebHomeWorkAuthorYIRC99
-  Expire: 3153600000000 #JWT 的配置有效时间为 100年
-  SEED: YourFixedSeedHere # 散列函数的固定随机种子
+  AESKey: ENC(uN0jRR1T19o/yBcu6TR7wVLsVL94XIsJ2tKXVJyU+ITnP4pYwHH2UOHn3JMThIAQ) #AES 密钥要求必须为32位
+  JWTKey: ENC(2DuwwqMyDABJNAw5tuDom9pOnp/HaEz6PQ51TnwGwJRE6tT8PvAD7lKmA6WZzo+wBwSAzXNOBFZBLR+iRkwqy1Q/lc4PggQZSSM1OKXd5Wg7bktwTF73qPfbU6+qDBxl)
+  Expire: ENC(81esOfK/f7p+OpnfrOl0TBbClp9CRCRB) #JWT 的配置有效时间为 100年
   Template:
     id: R0HVPNJRywpmvaA5xO6YWFfjLdGqcjWPB0-rqRkmkbk
