@@ -46,6 +46,7 @@ public class AdminFilter extends GenericFilterBean implements Filter {
         String[] urls = new String[]{
                 "/user/black",
                 "/user/white",
+                "/affiche/add",
                 "/sensitive",
                 "/nsfw/**"
         };

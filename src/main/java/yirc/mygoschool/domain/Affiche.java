@@ -26,7 +26,7 @@ public class Affiche implements Serializable {
      * 
      */
     @TableId
-    @JsonSerialize(using= ToStringSerializer.class) //使用jackson-datatype 把ID传承字符串传递
+    @JsonSerialize(using= ToStringSerializer.class) //使用jackson-datatype 把ID转成字符串传递
     private Long id;
 
     /**
@@ -38,10 +38,6 @@ public class Affiche implements Serializable {
      * 公告内容
      */
     private String text;
-
-    /**
-     * 
-     */
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
