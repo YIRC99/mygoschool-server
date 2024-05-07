@@ -13,6 +13,7 @@ import yirc.mygoschool.service.UserinfoService;
 import yirc.mygoschool.mapper.UserinfoMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -38,7 +39,9 @@ public class UserinfoServiceImpl extends ServiceImpl<UserinfoMapper, Userinfo>
             Userinfo newUser = new Userinfo();
             newUser.setOpenid(wxResult.getOpenid());
             newUser.setUsername("微信用户"+ UUID.randomUUID().toString().substring(0,3));
-            newUser.setAvatar("1"+".jpg");
+            // 随机生成一个[1,33]闭区间的数字 代表随机图片
+            Integer avatarIndex = new Random().nextInt(1, 34);
+            newUser.setAvatar(avatarIndex + ".jpg");
             newUser.setSex(1);
             newUser.setIsblack(0);
             newUser.setReportnum(0);

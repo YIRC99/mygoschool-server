@@ -1,7 +1,10 @@
 package yirc.mygoschool.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.domain.Affiche;
 import com.baomidou.mybatisplus.extension.service.IService;
+import yirc.mygoschool.domain.Shop;
 
 /**
 * @author 一见如初
@@ -10,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface AfficheService extends IService<Affiche> {
 
+    Page<Affiche> listByPage(PageInfoShop pageInfo);
 }

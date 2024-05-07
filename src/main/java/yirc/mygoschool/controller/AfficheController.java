@@ -1,14 +1,14 @@
 package yirc.mygoschool.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Affiche;
+import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.service.AfficheService;
 
 import java.util.List;
@@ -39,6 +39,21 @@ public class AfficheController {
         return Result.success("添加成功");
     }
 
+    //分页查询
+    @PostMapping("/page")
+    public Result list(@RequestBody PageInfoShop pageInfo) {
+        log.info("/page/list 分页查询的参数为: {} {} ",
+                pageInfo.getPageNum(), pageInfo.getPageSize());
+
+        if (Objects.isNull(pageInfo.getPageNum()) ||
+                Objects.isNull(pageInfo.getPageSize()) ||
+                (pageInfo.getAddressCodeArr().length == 0)) {
+            return Result.error("分页参数错误");
+        }
+        Page<Affiche> page = afficheService.listByPage(pageInfo);
+        return Result.success(page);
+    }
+
     //修改
     @PostMapping("/update")
     public Result updateAffiche(Affiche affiche) {
@@ -48,6 +63,7 @@ public class AfficheController {
         return Result.success("修改成功");
     }
 
+    //获取最新
     @GetMapping
     public Result getNewAffiche() {
         log.info("AfficheController getNewAffiche 获取最新的公告");
