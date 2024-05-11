@@ -48,8 +48,8 @@ public class MyNSFW implements CommandLineRunner {
 
 
     @Override
-    public void run(String... args) {
-        try{
+    public void run(String... args)  {
+        try {
             String pythonExecutable = pythonExePath;
             String scriptPath = pythonPath;
 
@@ -61,21 +61,25 @@ public class MyNSFW implements CommandLineRunner {
             // 获取结果 的类
             reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
             log.info("python 启动成功");
-        }catch (Exception e){
+        } catch (Exception e) {
+            try {
+                reader.close();
+                out.close();
+            } catch (IOException ex) {
+                throw new CustomException("启动python时出现错误 关闭python流时报错了" + ex.getMessage());
+            }
             throw new CustomException("python 启动失败 " + e.getMessage());
         }
-
-
     }
 
-    public void isNSFW(String imgPath,String userUUID) throws IOException {
+    public void isNSFW(String imgPath, String userUUID) throws IOException {
         // 发送图片路径给Python脚本
         out.println(imgPath);
         String line = reader.readLine();
         double ImgScore = Double.parseDouble(line);
         log.info("图片NSFW评分为：" + ImgScore);
         // 判断图片是不是为NSFW图片 大于NSFWScore 观察一下   大于NSFWMaxScore直接替换图片
-        if(ImgScore > NSFWScore && ImgScore < NSFWMaxScore){
+        if (ImgScore > NSFWScore && ImgScore < NSFWMaxScore) {
             // 这张图片可能是NSFW图片
             Mynsfw nsfwObj = new Mynsfw();
             nsfwObj.setImgpath(imgPath);
@@ -83,7 +87,7 @@ public class MyNSFW implements CommandLineRunner {
             nsfwObj.setPostuseropenid(userUUID);
             nsfwObj.setScore(ImgScore);
             mynsfwService.save(nsfwObj);
-        }else if(ImgScore > NSFWMaxScore){
+        } else if (ImgScore > NSFWMaxScore) {
             //这张图片一定是NSFW图片
             Mynsfw nsfwObj = new Mynsfw();
             nsfwObj.setImgpath(imgPath);

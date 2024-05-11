@@ -150,6 +150,12 @@ public class CommonController {
         // 创建线程处理图片
         VirtualIsNSFW(resultPath);
 
+        /**
+         * TODO 再创建一张表 每一次上传成功图片之后就在这一张表中插入一条数据
+         * 然后在发布接口中 找到这张表这这一行数据 修改这一行的状态
+         * 这样就可以实现在发布时判断图片是否要被使用了
+         */
+
 
         return Result.success(ResultFilename);
     }
