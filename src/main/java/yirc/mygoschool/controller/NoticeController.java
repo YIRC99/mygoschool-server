@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * @Version v1.0
  * @DateTime 2024/5/8 1:00
- * @Description TODO
+ * @Description 后台管理端管理软件介绍的控制类
  * @Author 一见如初
  */
 @Slf4j

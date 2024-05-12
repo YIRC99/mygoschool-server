@@ -10,6 +10,7 @@ import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.domain.Carshareorder;
 import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.domain.Userinfo;
+import yirc.mygoschool.service.MyimgService;
 import yirc.mygoschool.service.ShopService;
 import yirc.mygoschool.mapper.ShopMapper;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop>
 
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+
+    @Autowired
+    private MyimgService myimgService;
 
     @Override
     public boolean SaveWeChatImg(Shop shop) {
@@ -92,6 +96,17 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop>
             shop.setDetail(sensitiveWordBs.replace(shop.getDetail()));
         });
         return list;
+    }
+
+    @Override
+    public boolean MyUpdateById(Shop shop) {
+        shop.setBrowse(0);
+        Shop byId = this.getById(shop.getId());
+        // 将旧图片标记为未使用
+        myimgService.MydeleteImgUseList(byId.getImgs());
+        //新图片标记为使用
+        myimgService.MyAddImgUseList(shop.getImgs());
+        return this.updateById(shop);
     }
 }
 

@@ -15,6 +15,7 @@ import yirc.mygoschool.domain.Userinfo;
 import yirc.mygoschool.service.CarshareorderService;
 import yirc.mygoschool.mapper.CarshareorderMapper;
 import org.springframework.stereotype.Service;
+import yirc.mygoschool.service.MyimgService;
 import yirc.mygoschool.service.UserinfoService;
 
 import java.time.LocalDate;
@@ -38,6 +39,9 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
 
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+
+    @Autowired
+    private MyimgService myimgService;
 
     @Override
     public boolean SaveWeChatImg(Carshareorder order) {
@@ -87,7 +91,7 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
             if (!"其他".equals(pageInfo.getStartAddName())) {
                 // 新校区不仅濂溪校区一个关键词 可能出现 还有  九江职业大学新校区
                 if ("濂溪校区".equals(pageInfo.getStartAddName())) {
-                    // TODO 这里加一个需求  如果目的地是九职大也算
+                    //如果目的地是九职大也算
                     wrapper.and(i -> i.like(Carshareorder::getStartaddressall, pageInfo.getStartAddName())
                             .or().like(Carshareorder::getEndaddressall, pageInfo.getStartAddName())
                             .or().like(Carshareorder::getStartaddressall, "九江职业大学-北门")
@@ -95,7 +99,7 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
                             .or().like(Carshareorder::getStartaddressall, "九江职业大学新校区")
                             .or().like(Carshareorder::getEndaddressall, "九江职业大学新校区"));
                 } else if ("鹤问湖校区".equals(pageInfo.getStartAddName())) {
-                    // TODO 这里加一个需求  如果目的地是九职大也算
+                    // 如果目的地是九职大也算
                     wrapper.and(i -> i.like(Carshareorder::getStartaddressall, pageInfo.getStartAddName())
                             .or().like(Carshareorder::getEndaddressall, pageInfo.getStartAddName()));
                 }
@@ -202,6 +206,19 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
             orderDto.add(dto); // 将 DTO 添加到列表中
         }
         return orderDto;
+    }
+
+    @Override
+    public boolean MyUpdateById(Carshareorder order) {
+        order.setUpdateAt(LocalDateTime.now());
+        Carshareorder byId = this.getById(order.getOrderid());
+        // 将旧图片标记为未使用
+        myimgService.MydeleteImgUseList(byId.getWechatImg());
+        myimgService.MydeleteImgUseList(byId.getReceiveUserWechatImg());
+        //新图片标记为使用
+        myimgService.MyAddImgUseList(order.getWechatImg());
+        myimgService.MyAddImgUseList(order.getReceiveUserWechatImg());
+        return this.updateById(order);
     }
 
 

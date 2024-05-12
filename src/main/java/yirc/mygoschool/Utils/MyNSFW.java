@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import yirc.mygoschool.domain.Myimg;
 import yirc.mygoschool.domain.Mynsfw;
 import yirc.mygoschool.exception.CustomException;
+import yirc.mygoschool.service.MyimgService;
 import yirc.mygoschool.service.MynsfwService;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.regex.Pattern;
 
 /**
  * @Version v1.0
@@ -38,6 +38,9 @@ public class MyNSFW implements CommandLineRunner {
 
     @Autowired
     private MyUtil myUtil;
+
+    @Autowired
+    private MyimgService myimgService;
 
     @Autowired
     private MynsfwService mynsfwService;
@@ -95,6 +98,8 @@ public class MyNSFW implements CommandLineRunner {
             nsfwObj.setPostuseropenid(userUUID);
             nsfwObj.setScore(ImgScore);
             mynsfwService.save(nsfwObj);
+            String[] split = imgPath.split(Pattern.quote(File.separator));
+            myimgService.MyAddImgUseList(split[split.length - 1]);
             myUtil.replaceImg(imgPath);
         }
     }

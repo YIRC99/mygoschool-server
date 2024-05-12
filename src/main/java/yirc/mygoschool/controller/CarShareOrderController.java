@@ -21,17 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.CarshareorderDto;
 import yirc.mygoschool.Dto.PageInfoCar;
-import yirc.mygoschool.anno.OrderOverdue;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.config.AccessTokenService;
 import yirc.mygoschool.domain.*;
 import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.CarshareorderService;
+import yirc.mygoschool.service.MyimgService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -58,6 +59,9 @@ public class CarShareOrderController {
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
 
+    @Autowired
+    private MyimgService myimgService;
+
     @PostMapping("/add")
     public Result addCarShareOrder(@RequestBody Carshareorder carshareorder) {
         log.info("addCarShareOrder: {}", carshareorder);
@@ -67,6 +71,9 @@ public class CarShareOrderController {
 //            carshareorderService.isSavePhoneOrWeChat(carshareorder);
             carshareorderService.SaveWeChatImg(carshareorder);
         });
+        // 跟新数据库中的图片引用的状态
+        myimgService.MyAddImgUseList(carshareorder.getWechatImg());
+        myimgService.MyAddImgUseList(carshareorder.getReceiveUserWechatImg());
         var issuccess = carshareorderService.save(carshareorder);
         if (issuccess)
             return Result.success(carshareorder);
@@ -139,16 +146,19 @@ public class CarShareOrderController {
 
     @PostMapping("/update")
     public Result update(@RequestBody Carshareorder order) {
-        //  TODO 修改的时候要加上for update锁
-        order.setUpdateAt(LocalDateTime.now());
-        carshareorderService.updateById(order);
-        return Result.success("修改成功");
+        if (Objects.isNull(order.getOrderid()))
+            return Result.error("id不能为空");
+        if (carshareorderService.MyUpdateById(order)) {
+            return Result.success("修改成功");
+        }else{
+            return Result.error("修改失败");
+        }
     }
 
     @PostMapping("/delete")
     public Result deleteById(@RequestBody Carshareorder order){
-        //  TODO 删除的时候要加上for update锁
-
+        myimgService.MydeleteImgUseList(order.getWechatImg());
+        myimgService.MydeleteImgUseList(order.getReceiveUserWechatImg());
         LambdaUpdateWrapper<Carshareorder> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(Carshareorder::getIsDelete,0)
                 .eq(Carshareorder::getOrderid,order.getOrderid())

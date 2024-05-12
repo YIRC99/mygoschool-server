@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yirc.mygoschool.mapper.MyimgMapper">
+
+    <resultMap id="BaseResultMap" type="yirc.mygoschool.domain.Myimg">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="imgpath" column="imgPath" jdbcType="VARCHAR"/>
+            <result property="isuse" column="isUse" jdbcType="TINYINT"/>
+            <result property="createat" column="createAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,imgPath,isUse,
+        createAt
+    </sql>
+</mapper>

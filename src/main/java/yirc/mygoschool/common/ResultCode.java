@@ -12,4 +12,6 @@ public class ResultCode {
     public static final int USER_NOT_LOGIN = 407; //用户未登录状态码
     public static final int USER_LOGIN_SUCCESS = 408; //用户登录成功状态码
     public static final int USER_IS_BLACK = 409; // 黑名单用户
+
+    public static final int INSET_IMAGE_TO_DATABASE_ERROR = 410; // 插入图片到数据库失败
 }

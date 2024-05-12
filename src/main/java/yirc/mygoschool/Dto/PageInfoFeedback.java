@@ -6,7 +6,7 @@ import yirc.mygoschool.domain.PageInfo;
 /**
  * @Version v1.0
  * @DateTime 2024/4/26 23:43
- * @Description TODO
+ * @Description 意见查询条件分页类
  * @Author 一见如初
  */
 @Data

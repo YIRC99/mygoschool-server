@@ -13,10 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 import yirc.mygoschool.Utils.BaseContext;
 import yirc.mygoschool.Utils.MyNSFW;
 import yirc.mygoschool.common.Result;
+import yirc.mygoschool.common.ResultCode;
 import yirc.mygoschool.config.SensitiveWordConfig;
 import yirc.mygoschool.domain.Mysensitive;
 import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.sensitiveWord.SensitiveWordService;
+import yirc.mygoschool.service.MyimgService;
 import yirc.mygoschool.service.MysensitiveService;
 
 import java.io.File;
@@ -31,6 +33,9 @@ public class CommonController {
 
     @Value("${yirc99.filePath}")
     private String filePath;
+
+    @Autowired
+    private MyimgService myimgService;
 
     @Autowired
     private MyNSFW myNSFW;
@@ -147,15 +152,14 @@ public class CommonController {
             throw new CustomException("文件上传失败"+e.getMessage());
         }
 
+        // 必须保证图片上传记录是正常保存到数据库中的 不然就不需要上传数据了 因为后期操作需要保证图片一定在数据库中
+        boolean isSave = myimgService.MySave(resultPath);
+        if (!isSave){
+            return Result.error("图片上传失败", ResultCode.INSET_IMAGE_TO_DATABASE_ERROR);
+        }
+
         // 创建线程处理图片
         VirtualIsNSFW(resultPath);
-
-        /**
-         * TODO 再创建一张表 每一次上传成功图片之后就在这一张表中插入一条数据
-         * 然后在发布接口中 找到这张表这这一行数据 修改这一行的状态
-         * 这样就可以实现在发布时判断图片是否要被使用了
-         */
-
 
         return Result.success(ResultFilename);
     }

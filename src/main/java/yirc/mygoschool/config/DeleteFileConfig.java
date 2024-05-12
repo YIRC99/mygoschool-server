@@ -1,8 +1,7 @@
 package yirc.mygoschool.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.mysql.cj.result.Field;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +11,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import yirc.mygoschool.domain.Carshareorder;
 import yirc.mygoschool.domain.Feekback;
+import yirc.mygoschool.domain.Myimg;
 import yirc.mygoschool.domain.Shop;
-import yirc.mygoschool.service.CarshareorderService;
-import yirc.mygoschool.service.FeekbackService;
-import yirc.mygoschool.service.MynsfwService;
-import yirc.mygoschool.service.ShopService;
+import yirc.mygoschool.service.*;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -47,6 +44,9 @@ public class DeleteFileConfig {
     @Autowired
     private MynsfwService mynsfwService;
 
+    @Autowired
+    private MyimgService myimgService;
+
     @Value("${yirc99.filePath}")
     private String filePath;
 
@@ -63,17 +63,68 @@ public class DeleteFileConfig {
         // 这里编写删除数据的逻辑
         log.info("开始执行每月1号0点的定时任务：删除过期数据");
         selectAbandonFile();
-        // 假设这里是删除数据的逻辑
-        // deleteOldDataLogic();
         log.info("定时任务执行完毕");
     }
 
     //查询整个项目所有已经被删除的文件
     private void selectAbandonFile() {
-        deleteShopFile();
-        deleteCarOrderFile();
-        deleteFeedbackFile();
-        deleteNSFWFile();
+        /**
+         * 下面这个四个方法是直接查询不同的类型然后查询31天前的数据然后去删除
+         * 但是因为这样查询不到未删除的图片 所以就不用了 废弃掉
+         * 下面我更新了一个更好更简单的方法
+         */
+//        deleteShopFile();
+//        deleteCarOrderFile();
+//        deleteFeedbackFile();
+//        deleteNSFWFile();
+        // 新方法 添加了一张条优化删除逻辑
+        deleteNotUseImg();
+    }
+
+    private void deleteNotUseImg(){
+        // 一次性删除数据库中的数据 准备的ids
+        List<Long> deleteIdList = new ArrayList<>();
+        // 查询所以未使用的图片 每一次查询5000条数据 然后执行删除
+        LambdaQueryWrapper<Myimg> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Myimg::getIsuse, 0);
+        //为了防止并发问题 删除文件的过程中，有其他线程向数据库中插入了新的数据 所以只查询3天前的数据
+        wrapper.lt(Myimg::getCreateat, LocalDateTime.now().minusDays(3));
+        Page<Myimg> page = myimgService.page(new Page<>(1, 5000), wrapper);
+        List<Myimg> imgList = page.getRecords();
+        // 因为查出来的直接是全路径 所以直接删除
+        // 遍历查询结果，逐个删除图片文件并添加要删除的数据库id
+        for (Myimg img : imgList) {
+            File imgFile = new File(img.getImgpath());
+            if (imgFile.exists() && imgFile.isFile()) {
+                imgFile.delete();
+                log.warn("删除图片文件成功：{}", imgFile.getAbsolutePath());
+                deleteIdList.add(img.getId());
+            }else{
+                log.error("删除图片文件失败 文件不存在或者是文件夹：{}", imgFile.getAbsolutePath());
+            }
+        }
+
+        // 删除成功之后再去查询下一个5000条数据 直到查出0条数据
+        while(page.hasNext()){
+            page = myimgService.page(page, wrapper);
+            imgList = page.getRecords();
+            for (Myimg img : imgList) {
+                File imgFile = new File(img.getImgpath());
+                if (imgFile.exists() && imgFile.isFile()) {
+                    imgFile.delete();
+                    log.warn("删除图片文件成功：{}", imgFile.getAbsolutePath());
+                    deleteIdList.add(img.getId());
+                }else{
+                    log.error("删除图片文件失败 文件不存在或者是文件夹：{}", imgFile.getAbsolutePath());
+                }
+            }
+        }
+        // 删除之后 然后再去数据库中删除这些数据 减少存储压力
+        if(!deleteIdList.isEmpty()){
+            boolean deleteResult = myimgService.removeByIds(deleteIdList);
+            if(!deleteResult)
+                log.error("删除数据库中无用的引用数据失败");
+        }
     }
 
     private void deleteNSFWFile() {
@@ -101,7 +152,7 @@ public class DeleteFileConfig {
                     file.delete();
                     feekback.setIsDelete(3);
                     log.error("自动删除文件 路径为: {}", resultPath + s);
-                    // TODO 这里考虑一下 删除文件需不需要存一个日志
+                    //  这里考虑一下 删除文件需不需要存一个日志
                 }
             }
         }

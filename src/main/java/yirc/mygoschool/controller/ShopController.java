@@ -11,10 +11,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.common.Result;
-import yirc.mygoschool.domain.PageInfo;
 import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.domain.Userinfo;
 import yirc.mygoschool.exception.CustomException;
+import yirc.mygoschool.service.MyimgService;
 import yirc.mygoschool.service.ShopService;
 
 import java.time.LocalDateTime;
@@ -42,6 +42,9 @@ public class ShopController {
 
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+
+    @Autowired
+    private MyimgService myimgService;
 
 
     @PostMapping("/addbrowse")
@@ -94,6 +97,8 @@ public class ShopController {
         Thread.ofVirtual().start(() -> {
             shopService.SaveWeChatImg(shop);
         });
+        // 添加图片在数据库中的引用
+        myimgService.MyAddImgUseList(shop.getImgs());
         boolean save = shopService.save(shop);
         if (save)
             return Result.success("添加成功");
@@ -134,10 +139,14 @@ public class ShopController {
 
     @PostMapping("/update")
     public Result updateShop(@RequestBody Shop shop) {
-        if (shop.getId() == null)
-            throw new CustomException("商品id不能为空");
-        shop.setBrowse(0);
-        return Result.success(shopService.updateById(shop));
+        if (Objects.isNull(shop.getId()))
+            return Result.error("商品id不能为空");
+
+        if (shopService.MyUpdateById(shop)) {
+            return Result.success("修改成功");
+        }else{
+            return Result.error("修改失败");
+        }
     }
 
     @PostMapping("/delete")
@@ -145,6 +154,8 @@ public class ShopController {
         if (shop.getId() == null)
             throw new CustomException("商品id不能为空");
         shop.setIsdelete(1);
+        // 删除图片在数据中的引用
+        myimgService.MydeleteImgUseList(shop.getImgs());
         return Result.success(shopService.updateById(shop));
     }
 

@@ -31,4 +31,5 @@ public interface CarshareorderService extends IService<Carshareorder> {
 
     List<CarshareorderDto> getUpOrderByUserId(Userinfo user);
 
+    boolean MyUpdateById(Carshareorder order);
 }

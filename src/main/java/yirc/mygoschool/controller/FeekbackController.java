@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yirc.mygoschool.Dto.PageInfoFeedback;
-import yirc.mygoschool.Dto.PageInfoUser;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Feekback;
-import yirc.mygoschool.domain.Userinfo;
 import yirc.mygoschool.service.FeekbackService;
+import yirc.mygoschool.service.MyimgService;
 
 import java.util.Objects;
 
@@ -30,10 +29,15 @@ public class FeekbackController {
     @Autowired
     private FeekbackService feekbackService;
 
+    @Autowired
+    private MyimgService myimgService;
+
     @PostMapping("add")
     public Result add(@RequestBody Feekback feekback){
         log.info("添加反馈: {}",feekback);
         feekbackService.save(feekback);
+        // 异步修改图片引用状态
+        myimgService.MyAddImgUseList(feekback.getImglist());
         return Result.success("反馈成功");
     }
 
