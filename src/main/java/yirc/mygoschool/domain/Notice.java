@@ -49,6 +49,9 @@ public class Notice implements Serializable {
      */
     private Integer isdelete;
 
+    @TableField(value = "sort")
+    private Integer sort;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

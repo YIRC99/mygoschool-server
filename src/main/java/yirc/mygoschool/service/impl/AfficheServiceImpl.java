@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.domain.Affiche;
+import yirc.mygoschool.domain.PageInfo;
 import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.service.AfficheService;
 import yirc.mygoschool.mapper.AfficheMapper;
@@ -24,7 +25,7 @@ public class AfficheServiceImpl extends ServiceImpl<AfficheMapper, Affiche>
 
 
     @Override
-    public Page<Affiche> listByPage(PageInfoShop pageInfo) {
+    public Page<Affiche> listByPage(PageInfo pageInfo) {
         Page<Affiche> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
         return this.page(page);
     }

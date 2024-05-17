@@ -87,6 +87,10 @@ public class UserinfoController {
         if(Objects.isNull(byId)){
             return Result.error("该用户不存在");
         }
+        if("2022020926".equals(user.getOpenid()) || "2022020926".equals(user.getUserid())){
+            return Result.error("该用户为管理员");
+        }
+
         String key = "userBlack:" + byId.getOpenid();
         if (Boolean.TRUE.equals(redisTemplate.hasKey(key)) || byId.getIsblack() == 1){
             return Result.error("该用户已被拉黑");

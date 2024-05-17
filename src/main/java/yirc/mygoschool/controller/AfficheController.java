@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Affiche;
+import yirc.mygoschool.domain.PageInfo;
 import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.service.AfficheService;
 
@@ -30,7 +31,7 @@ public class AfficheController {
 
     // 添加
     @PostMapping("/add")
-    public Result addAffiche(Affiche affiche) {
+    public Result addAffiche(@RequestBody Affiche affiche) {
         log.info("AfficheController addAffiche 添加公告");
         if(Objects.isNull(affiche.getTitle()) || Objects.isNull(affiche.getText())){
             return Result.error("参数错误 添加失败");
@@ -41,13 +42,12 @@ public class AfficheController {
 
     //分页查询
     @PostMapping("/page")
-    public Result list(@RequestBody PageInfoShop pageInfo) {
+    public Result list(@RequestBody PageInfo pageInfo) {
         log.info("/page/list 分页查询的参数为: {} {} ",
                 pageInfo.getPageNum(), pageInfo.getPageSize());
 
         if (Objects.isNull(pageInfo.getPageNum()) ||
-                Objects.isNull(pageInfo.getPageSize()) ||
-                (pageInfo.getAddressCodeArr().length == 0)) {
+                Objects.isNull(pageInfo.getPageSize())) {
             return Result.error("分页参数错误");
         }
         Page<Affiche> page = afficheService.listByPage(pageInfo);

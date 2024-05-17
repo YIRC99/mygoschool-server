@@ -59,6 +59,8 @@ public class CommonController {
         ServletOutputStream ops = null;
         //获取项目根目录
         String projectRootPath = new File("").getAbsolutePath();
+        // 检查默认文件夹路径
+        String defaultDirPath =  projectRootPath + filePath + "default"+ File.separator;
         // 在项目根目录下构建相对路径
         String relativePath = filePath + path + File.separator; // 设置相对路径
         String resultPath = projectRootPath + File.separator + relativePath;
@@ -86,7 +88,7 @@ public class CommonController {
 
         } catch (IOException e){
             log.error("文件下载失败: {}",e.getMessage());
-            fis = new FileInputStream(new File(resultPath + "nullFindFile.jpg"));
+            fis = new FileInputStream(new File(defaultDirPath + "nullFindFile.jpg"));
             ops = response.getOutputStream();
             response.setContentType("image"+File.separator+"jpeg");
             int len = 0;
