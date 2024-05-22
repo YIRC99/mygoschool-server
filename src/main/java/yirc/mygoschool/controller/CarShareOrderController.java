@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.CarshareorderDto;
 import yirc.mygoschool.Dto.PageInfoCar;
 import yirc.mygoschool.Utils.BaseContext;
+import yirc.mygoschool.anno.AdminRequest;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.config.AccessTokenService;
 import yirc.mygoschool.domain.*;
@@ -167,6 +168,7 @@ public class CarShareOrderController {
     }
 
     @PostMapping("/admin/delete")
+    @AdminRequest
     public Result AdminDeleteById(@RequestBody Carshareorder order){
         if(Objects.isNull(order.getOrderid())){
             return Result.error("id不能为空");

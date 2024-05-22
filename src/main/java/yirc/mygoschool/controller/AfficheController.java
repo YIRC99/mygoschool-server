@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.PageInfoShop;
+import yirc.mygoschool.anno.AdminRequest;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Affiche;
 import yirc.mygoschool.domain.PageInfo;
@@ -30,6 +31,7 @@ public class AfficheController {
     private AfficheService afficheService;
 
     // 添加
+    @AdminRequest
     @PostMapping("/add")
     public Result addAffiche(@RequestBody Affiche affiche) {
         log.info("AfficheController addAffiche 添加公告");
@@ -42,6 +44,7 @@ public class AfficheController {
 
     //分页查询
     @PostMapping("/page")
+    @AdminRequest
     public Result list(@RequestBody PageInfo pageInfo) {
         log.info("/page/list 分页查询的参数为: {} {} ",
                 pageInfo.getPageNum(), pageInfo.getPageSize());
@@ -56,6 +59,7 @@ public class AfficheController {
 
     //修改
     @PostMapping("/update")
+    @AdminRequest
     public Result updateAffiche(@RequestBody Affiche affiche) {
         log.info("AfficheController updateAffiche 修改公告");
         if(Objects.isNull(affiche.getId())) return Result.error("参数错误 修改失败");

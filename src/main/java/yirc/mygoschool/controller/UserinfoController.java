@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.PageInfoUser;
 import yirc.mygoschool.Utils.MyUtil;
+import yirc.mygoschool.anno.AdminRequest;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.common.WxResult;
 import yirc.mygoschool.domain.Shop;
@@ -78,6 +79,7 @@ public class UserinfoController {
 
     @PostMapping("/black")
     @Transactional
+    @AdminRequest
     public Result blackUser(@RequestBody Userinfo user){
         if(Objects.isNull(user.getUserid())){
             return Result.error("请求参数错误: id为空");
@@ -103,6 +105,7 @@ public class UserinfoController {
 
     @PostMapping("/white")
     @Transactional
+    @AdminRequest
     public Result whiteUser(@RequestBody Userinfo user){
         if(Objects.isNull(user.getUserid())){
             return Result.error("请求参数错误: id为空");

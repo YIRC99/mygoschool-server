@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yirc.mygoschool.Dto.PageInfoMyNSFW;
+import yirc.mygoschool.anno.AdminRequest;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Mynsfw;
 import yirc.mygoschool.service.MynsfwService;
@@ -32,6 +33,7 @@ public class NSFWController {
      * 分页查询NSFW图片
      */
     @PostMapping("/page")
+    @AdminRequest
     public Result list(@RequestBody PageInfoMyNSFW pageInfo) {
         log.info("/nsfw/list 分页查询的参数为: {} {} {}",
                 pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getStatus());
@@ -48,6 +50,7 @@ public class NSFWController {
      * 标记图片为NSFW
      */
     @PostMapping("/sign")
+    @AdminRequest
     public Result sign(@RequestBody Mynsfw mynsfw){
         if(Objects.isNull(mynsfw.getId())){
             return Result.error("参数错误");
@@ -59,6 +62,7 @@ public class NSFWController {
      * 取消NSFW图片标记
      */
     @PostMapping("/recover")
+    @AdminRequest
     public Result cancel(@RequestBody Mynsfw mynsfw){
         if(Objects.isNull(mynsfw.getId())){
             return Result.error("参数错误");
@@ -70,6 +74,7 @@ public class NSFWController {
      * 标记图片为正常图片
      */
     @PostMapping("/fine")
+    @AdminRequest
     public Result fine(@RequestBody Mynsfw mynsfw){
         if(Objects.isNull(mynsfw.getId())){
             return Result.error("参数错误");

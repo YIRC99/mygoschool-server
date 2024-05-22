@@ -4,6 +4,7 @@ import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import yirc.mygoschool.anno.AdminRequest;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Mysensitive;
 import yirc.mygoschool.sensitiveWord.SensitiveWordService;
@@ -33,12 +34,14 @@ public class SensitiveController {
 
     // 查询所有的违规词
     @PostMapping("/list")
+    @AdminRequest
     public Result list(){
         return Result.success(mysensitiveService.list());
     }
 
     // 修改所有违规词
     @PostMapping("/update")
+    @AdminRequest
     public Result update(@RequestBody Mysensitive mysensitive){
         boolean result = mysensitiveService.updateById(mysensitive);
         if (!result)return Result.error("修改失败");
@@ -55,6 +58,7 @@ public class SensitiveController {
     }
 
     @PostMapping("/refresh")
+    @AdminRequest
     public Result myRefresh(){
         sensitiveWordService.refresh();
         return Result.success("重置成功");

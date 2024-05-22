@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.PageInfoShop;
 import yirc.mygoschool.Utils.BaseContext;
+import yirc.mygoschool.anno.AdminRequest;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.domain.Userinfo;
@@ -109,14 +110,15 @@ public class ShopController {
 
     @PostMapping("/page")
     public Result list(@RequestBody PageInfoShop pageInfo) {
+        if (Objects.isNull(pageInfo.getPageNum()) ||
+                Objects.isNull(pageInfo.getPageSize()) ||
+                Objects.isNull(pageInfo.getAddressCodeArr()) ||
+                (pageInfo.getAddressCodeArr().length == 0) ) {
+            return Result.error("分页参数错误");
+        }
         log.info("/page/list 分页查询的参数为: {} {} {}",
                 pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getAddressCodeArr());
 
-        if (Objects.isNull(pageInfo.getPageNum()) ||
-                Objects.isNull(pageInfo.getPageSize()) ||
-                (pageInfo.getAddressCodeArr().length == 0)) {
-            return Result.error("分页参数错误");
-        }
         Page<Shop> page = shopService.listByPage(pageInfo);
         return Result.success(page);
     }
@@ -167,6 +169,7 @@ public class ShopController {
     }
 
     @PostMapping("/admin/delete")
+    @AdminRequest
     public Result adminDeleteShop(@RequestBody Shop shop) {
         if (Objects.isNull(shop.getId()))
             throw new CustomException("商品id不能为空");

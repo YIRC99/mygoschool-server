@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import yirc.mygoschool.anno.AdminRequest;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Notice;
 import yirc.mygoschool.service.NoticeService;
@@ -38,6 +39,7 @@ public class NoticeController {
     }
 
     @PostMapping("/update")
+    @AdminRequest
     public Result update(@RequestBody Notice notice) {
         log.info("修改软件介绍");
         if(Objects.isNull(notice.getId())) return Result.error("参数错误 修改失败");
@@ -46,6 +48,7 @@ public class NoticeController {
     }
 
     @PostMapping("/add")
+    @AdminRequest
     public Result add(@RequestBody Notice notice){
         if(Objects.isNull(notice.getTitle()) || Objects.isNull(notice.getText()))
             return Result.error("标题或内容为空");
@@ -57,6 +60,7 @@ public class NoticeController {
     }
 
     @PostMapping("/delete")
+    @AdminRequest
     public Result delete(@RequestBody Notice notice){
         if(Objects.isNull(notice.getId())) return Result.error("参数错误 删除失败");
         notice.setIsdelete(1);
