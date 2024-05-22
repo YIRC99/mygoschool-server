@@ -16,7 +16,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 
 /**
- * 
+ * 评价实体类
  * @TableName apprise
  */
 @TableName(value ="apprise")
@@ -40,7 +40,7 @@ public class Apprise implements Serializable {
     private String receiveuserid;
 
     /**
-     * 拼接内容
+     * 评价内容
      */
     private String apprisedata;
 

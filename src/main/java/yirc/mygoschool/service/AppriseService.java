@@ -1,5 +1,7 @@
 package yirc.mygoschool.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import yirc.mygoschool.Dto.PageInfoApprise;
 import yirc.mygoschool.domain.Apprise;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface AppriseService extends IService<Apprise> {
 
+    Page<Apprise> MyPage(PageInfoApprise pageinfo);
 }

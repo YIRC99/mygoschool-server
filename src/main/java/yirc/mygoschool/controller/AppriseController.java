@@ -1,6 +1,7 @@
 package yirc.mygoschool.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -8,15 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.AppriseDto;
+import yirc.mygoschool.Dto.PageInfoApprise;
+import yirc.mygoschool.anno.AdminRequest;
 import yirc.mygoschool.common.OrderStatus;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Apprise;
 import yirc.mygoschool.domain.Carshareorder;
+import yirc.mygoschool.domain.PageInfo;
 import yirc.mygoschool.domain.Userinfo;
 import yirc.mygoschool.service.AppriseService;
 import yirc.mygoschool.service.CarshareorderService;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Version v1.0
@@ -75,6 +80,29 @@ public class AppriseController {
             i.setApprisedata(sensitiveWordBs.replace(i.getApprisedata()));
         });
         return Result.success(list);
+    }
+
+    @PostMapping("/page")
+    @AdminRequest
+    public Result page(@RequestBody PageInfoApprise pageinfo){
+        if(Objects.isNull(pageinfo.getPageNum()) || Objects.isNull(pageinfo.getPageSize()))
+            return Result.error("分页参数有误");
+
+        Page<Apprise> page = appriseService.MyPage(pageinfo);
+        return Result.success(page);
+    }
+
+    @PostMapping("/delete")
+    @AdminRequest
+    public Result delete(@RequestBody Apprise apprise){
+        if(Objects.isNull(apprise.getId()))
+            return Result.error("id为空");
+
+        apprise.setIsdelate(1);
+        boolean update = appriseService.updateById(apprise);
+        if(!update)
+            return Result.error("删除失败");
+        return Result.success("删除成功");
     }
 
 
