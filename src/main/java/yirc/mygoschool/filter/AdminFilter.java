@@ -45,6 +45,8 @@ public class AdminFilter extends GenericFilterBean implements Filter {
         // 配置需要Admin的请求
         String[] urls = new String[]{
                 "/user/black",
+                "/shop/admin/delete",
+                "/carshareorder/admin/delete",
                 "/user/white",
                 "/affiche/add",
                 "/sensitive",

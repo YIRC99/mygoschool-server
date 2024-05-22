@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.PageInfoShop;
+import yirc.mygoschool.Utils.BaseContext;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Shop;
 import yirc.mygoschool.domain.Userinfo;
@@ -17,6 +18,7 @@ import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.MyimgService;
 import yirc.mygoschool.service.ShopService;
 
+import java.beans.beancontext.BeanContext;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -152,6 +154,21 @@ public class ShopController {
     @PostMapping("/delete")
     public Result deleteShop(@RequestBody Shop shop) {
         if (shop.getId() == null)
+            throw new CustomException("商品id不能为空");
+        Shop byId = shopService.getById(shop);
+        // 查询一下要删除的shop是不是自己创建的 如果不是那就禁止删除
+        if(!byId.getCreateuserid().equals(BaseContext.getCurrentUserId())){
+            return Result.error("信息有误 无法删除");
+        }
+        shop.setIsdelete(1);
+        // 删除图片在数据中的引用
+        myimgService.MydeleteImgUseList(shop.getImgs());
+        return Result.success(shopService.updateById(shop));
+    }
+
+    @PostMapping("/admin/delete")
+    public Result adminDeleteShop(@RequestBody Shop shop) {
+        if (Objects.isNull(shop.getId()))
             throw new CustomException("商品id不能为空");
         shop.setIsdelete(1);
         // 删除图片在数据中的引用

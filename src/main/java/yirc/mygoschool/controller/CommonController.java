@@ -78,6 +78,8 @@ public class CommonController {
             response.setContentType("image"+ File.separator+"jpeg");
             response.setContentType("image"+ File.separator+"jpg");
             response.setContentType("image"+ File.separator+"png");
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename=" + name);
             int len = 0;
             byte[] buffer = new byte[1024];
             while ((len = fis.read(buffer)) != -1){

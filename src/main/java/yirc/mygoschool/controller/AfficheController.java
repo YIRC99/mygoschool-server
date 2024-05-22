@@ -56,7 +56,7 @@ public class AfficheController {
 
     //修改
     @PostMapping("/update")
-    public Result updateAffiche(Affiche affiche) {
+    public Result updateAffiche(@RequestBody Affiche affiche) {
         log.info("AfficheController updateAffiche 修改公告");
         if(Objects.isNull(affiche.getId())) return Result.error("参数错误 修改失败");
         afficheService.updateById(affiche);

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import yirc.mygoschool.Dto.CarshareorderDto;
 import yirc.mygoschool.Dto.PageInfoCar;
+import yirc.mygoschool.Utils.BaseContext;
 import yirc.mygoschool.common.Result;
 import yirc.mygoschool.config.AccessTokenService;
 import yirc.mygoschool.domain.*;
@@ -143,7 +144,6 @@ public class CarShareOrderController {
         return Result.success(byId);
     }
 
-
     @PostMapping("/update")
     public Result update(@RequestBody Carshareorder order) {
         if (Objects.isNull(order.getOrderid()))
@@ -157,6 +157,20 @@ public class CarShareOrderController {
 
     @PostMapping("/delete")
     public Result deleteById(@RequestBody Carshareorder order){
+        if(Objects.isNull(order.getOrderid())){
+            return Result.error("id不能为空");
+        }
+        boolean update = carshareorderService.MyDeleteOrderById(order);
+        if (!update)
+            return Result.error("删除失败");
+        return Result.success("删除成功");
+    }
+
+    @PostMapping("/admin/delete")
+    public Result AdminDeleteById(@RequestBody Carshareorder order){
+        if(Objects.isNull(order.getOrderid())){
+            return Result.error("id不能为空");
+        }
         myimgService.MydeleteImgUseList(order.getWechatImg());
         myimgService.MydeleteImgUseList(order.getReceiveUserWechatImg());
         LambdaUpdateWrapper<Carshareorder> wrapper = new LambdaUpdateWrapper<>();
@@ -164,11 +178,11 @@ public class CarShareOrderController {
                 .eq(Carshareorder::getOrderid,order.getOrderid())
                 .set(Carshareorder::getIsDelete,1);
         boolean update = carshareorderService.update(wrapper);
-        if (!update){
+        if (!update)
             return Result.error("删除失败");
-        }
         return Result.success("删除成功");
     }
+
 
     //获取用户发布的订单 第三者的视角 过滤掉超时的
     @PostMapping("/getbyuserid/up")

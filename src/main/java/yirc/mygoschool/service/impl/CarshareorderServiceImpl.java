@@ -9,9 +9,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import yirc.mygoschool.Dto.CarshareorderDto;
 import yirc.mygoschool.Dto.PageInfoCar;
+import yirc.mygoschool.Utils.BaseContext;
+import yirc.mygoschool.common.Result;
 import yirc.mygoschool.domain.Carshareorder;
 import yirc.mygoschool.domain.PageInfo;
 import yirc.mygoschool.domain.Userinfo;
+import yirc.mygoschool.exception.CustomException;
 import yirc.mygoschool.service.CarshareorderService;
 import yirc.mygoschool.mapper.CarshareorderMapper;
 import org.springframework.stereotype.Service;
@@ -219,6 +222,23 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
         myimgService.MyAddImgUseList(order.getWechatImg());
         myimgService.MyAddImgUseList(order.getReceiveUserWechatImg());
         return this.updateById(order);
+    }
+
+    @Override
+    public boolean MyDeleteOrderById(Carshareorder order) {
+        Carshareorder byId = this.getById(order);
+        // 查询一下要删除的shop是不是自己创建的 如果不是那就禁止删除
+        if(!byId.getCreateuserid().equals(BaseContext.getCurrentUserId())){
+            log.error("不能删除其他用户的订单");
+            return false;
+        }
+        myimgService.MydeleteImgUseList(order.getWechatImg());
+        myimgService.MydeleteImgUseList(order.getReceiveUserWechatImg());
+        LambdaUpdateWrapper<Carshareorder> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Carshareorder::getIsDelete,0)
+                .eq(Carshareorder::getOrderid,order.getOrderid())
+                .set(Carshareorder::getIsDelete,1);
+        return this.update(wrapper);
     }
 
 
