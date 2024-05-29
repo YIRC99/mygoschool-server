@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 /**
  * @Version v1.0
  * @DateTime 2024/5/22 9:56
- * @Description TODO
+ * @Description 管理端拦截器
  * @Author 一见如初
  */
 @Component

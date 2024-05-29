@@ -101,7 +101,8 @@ public class MyNSFW implements CommandLineRunner {
             myimgService.MyAddImgUseList(split[split.length - 1]);
             String replacedImg = myUtil.replaceImg(imgPath);
 //            nsfwObj.setImgpath(imgPath); // 将违规的图片路径保存到数据库
-
+            // TODO 这里可能会出现问题 后面再测试
+            // 因为是直接标记图片 然后后期需要不停的恢复 然后在标记 测试
             nsfwObj.setImgpath(replacedImg); // 将备份的图片路径保存到数据库 目前测试通过 暂时没有发现问题 但是不敢确定 还需要大面积的测试
 
             mynsfwService.save(nsfwObj);

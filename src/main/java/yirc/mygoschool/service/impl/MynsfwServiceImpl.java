@@ -70,7 +70,6 @@ public class MynsfwServiceImpl extends ServiceImpl<MynsfwMapper, Mynsfw>
     // 根据图片路径恢复图片
     private void VirtualRecoverNSFW(String imgPath,Mynsfw byId) {
         Thread.ofVirtual().start(() -> {
-            // TODO 这里不能这样写 小程序端会查不到
             // 这里恢复之前先判断一下 如果纯在备份 就直接从备份里面拿数据 就不用recover了
 //            if(!Objects.isNull(byId.getBackupImgPath())){
 //                byId.setImgpath(byId.getBackupImgPath());
@@ -82,7 +81,7 @@ public class MynsfwServiceImpl extends ServiceImpl<MynsfwMapper, Mynsfw>
 //                byId.setStatus(1);
 //                this.updateById(byId);
 //            }
-
+            // 这里就这样操作 因为我们替换图片都是直接替换本地图片不是io 所以就可以这样操作
             myUtil.recoverImg(imgPath);
         });
     }

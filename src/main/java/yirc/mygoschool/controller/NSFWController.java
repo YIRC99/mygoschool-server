@@ -79,6 +79,9 @@ public class NSFWController {
         if(Objects.isNull(mynsfw.getId())){
             return Result.error("参数错误");
         }
+        // TODO 这里直接标记图片为正常图片
+        // 如果后期我觉得那个是nsfw图片 我需要改变图片的状态 这个还没有测试
+        // 等后期 标记图片之后 然后在恢复图片  循环暴力测试
         Mynsfw byId = mynsfwService.getById(mynsfw);
         if(byId.getStatus() != 0)
             return Result.error("图片状态错误,无法标记");
