@@ -15,6 +15,7 @@ public interface MynsfwService extends IService<Mynsfw> {
 
     Page<Mynsfw> listByPage(PageInfoMyNSFW pageInfo);
 
+
     Result sign(Mynsfw mynsfw);
 
     Result recover(Mynsfw mynsfw);

@@ -93,14 +93,18 @@ public class MyNSFW implements CommandLineRunner {
         } else if (ImgScore > NSFWMaxScore) {
             //这张图片一定是NSFW图片
             Mynsfw nsfwObj = new Mynsfw();
-            nsfwObj.setImgpath(imgPath);
             nsfwObj.setStatus(2);
             nsfwObj.setPostuseropenid(userUUID);
             nsfwObj.setScore(ImgScore);
-            mynsfwService.save(nsfwObj);
+
             String[] split = imgPath.split(Pattern.quote(File.separator));
             myimgService.MyAddImgUseList(split[split.length - 1]);
-            myUtil.replaceImg(imgPath);
+            String replacedImg = myUtil.replaceImg(imgPath);
+//            nsfwObj.setImgpath(imgPath); // 将违规的图片路径保存到数据库
+
+            nsfwObj.setImgpath(replacedImg); // 将备份的图片路径保存到数据库 目前测试通过 暂时没有发现问题 但是不敢确定 还需要大面积的测试
+
+            mynsfwService.save(nsfwObj);
         }
     }
 

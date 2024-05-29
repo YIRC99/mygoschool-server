@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yirc.mygoschool.Utils.BaseContext;
@@ -21,6 +23,7 @@ import yirc.mygoschool.sensitiveWord.SensitiveWordService;
 import yirc.mygoschool.service.MyimgService;
 import yirc.mygoschool.service.MysensitiveService;
 
+import javax.crypto.spec.PSource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,6 +39,9 @@ public class CommonController {
 
     @Autowired
     private MyimgService myimgService;
+
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     private MyNSFW myNSFW;
@@ -182,5 +188,14 @@ public class CommonController {
                 throw new CustomException("处理"+resultPath+"图片时出错"+e.getMessage());
             }
         });
+    }
+
+    @PostMapping("/redis")
+    private Result redisTest(){
+        for (int i = 0; i < 100000; i++) {
+//            redisTemplate.opsForValue().set(String.valueOf(i),"192.162.58,110,192.162.58,110");
+            redisTemplate.delete(String.valueOf(i));
+        }
+        return Result.success("redis测试成功");
     }
 }

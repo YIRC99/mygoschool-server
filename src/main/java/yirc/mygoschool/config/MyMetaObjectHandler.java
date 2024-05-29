@@ -7,7 +7,10 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-// mybatis plus 自动填充 配置类
+/**
+ * mybatisPlus自动填充配置类
+ */
+// mybatisPlus自动填充配置类
 @Component
 @Slf4j
 public class MyMetaObjectHandler implements MetaObjectHandler {

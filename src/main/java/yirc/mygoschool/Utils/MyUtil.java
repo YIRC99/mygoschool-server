@@ -98,8 +98,8 @@ public class MyUtil {
     }
 
 
-    //给你一个图片路径 将这个图片替换为空白图片但是不替换名称 覆盖掉
-    public void replaceImg(String nsfwImgPath){
+    //给你一个图片路径 将这个图片替换为空白图片但是不替换名称 覆盖掉 然后返回备份的图片路径
+    public String replaceImg(String nsfwImgPath){
         String projectRootPath = new File("").getAbsolutePath();
 
         //覆盖图片之前 先提前保存一份
@@ -112,8 +112,9 @@ public class MyUtil {
         String[] arr = nsfwImgPath.split(Pattern.quote(File.separator));
         String nsfwImgName = arr[arr.length-1];
         Path nsfwPath = Paths.get(nsfwImgPath);
+        String templatePath = template + nsfwImgName; // 替换后的备份文件路径
         try {
-            Files.copy(nsfwPath,Paths.get(template+nsfwImgName));
+            Files.copy(nsfwPath,Paths.get(templatePath), StandardCopyOption.REPLACE_EXISTING); // 如果存在 直接覆盖
         } catch (IOException e) {
             throw new RuntimeException("保存违规图片出错"+ e.getMessage());
         }
@@ -132,20 +133,19 @@ public class MyUtil {
         } catch (IOException e) {
             throw new RuntimeException("替换违规图片出错"+ e.getMessage());
         }
-
+        return templatePath;
     }
 
     //传入一个已经违规的图片 然后去nsfw文件夹中恢复
     public void recoverImg(String imgPath) {
         //拿到图片名称
-        // 拿到图片名称
         String[] arr = imgPath.split(Pattern.quote(File.separator));
         String nsfwImgName = arr[arr.length-1];
         //去nsfw文件夹中找到图片
         String projectRootPath = new File("").getAbsolutePath();
         String template =  projectRootPath + filePath + "nsfw" + File.separator;
         File nsfwImgFile = new File(template + nsfwImgName);
-        if(!nsfwImgFile.exists()) throw new RuntimeException("恢复图片出错，nsfw中没有找到图片");
+        if(!nsfwImgFile.exists()) throw new RuntimeException("恢复图片出错 nsfw中没有找到图片");
         //然后替换掉我传入的图片路径
         try {
             Files.copy(Paths.get(nsfwImgFile.toURI()),Paths.get(imgPath),StandardCopyOption.REPLACE_EXISTING);

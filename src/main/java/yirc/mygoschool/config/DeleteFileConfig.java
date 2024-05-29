@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 自动删除文件的配置类
  * @Version v1.0
  * @DateTime 2024/4/24 12:01
  * @Description 自动删除文件的配置类

@@ -38,6 +38,10 @@ public class Mynsfw implements Serializable {
      */
     private String imgpath;
 
+    // 备份图片路径 保存用户上传图片的路径
+    @TableField(value = "backupImgPath")
+    private String backupImgPath;
+
     /**
      * 0待审核可能是违规  1不是违规图片 2违规图片
      */

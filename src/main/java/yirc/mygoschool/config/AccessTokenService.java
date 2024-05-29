@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 微信一键登录需要获取AccessToken 定时获取并保存
  * @Version v1.0
  * @DateTime 2024/3/4 19:15
  * @Description 微信一键登录需要获取AccessToken 定时获取并保存

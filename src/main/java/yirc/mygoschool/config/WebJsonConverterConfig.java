@@ -13,13 +13,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 /**
+ * 解决Java8 日期序列化问题
  * @Version v1.0
  * @DateTime 2024/4/28 12:30
  * @Description 解决Java8 日期序列化问题
  * @Author 一见如初
  */
 
-//@Configuration
+//@Configuration 没用
 public class WebJsonConverterConfig implements WebMvcConfigurer {
 
     /**

@@ -59,7 +59,7 @@ public class NSFWController {
     }
 
     /**
-     * 取消NSFW图片标记
+     * 恢复NSFW图片标记
      */
     @PostMapping("/recover")
     @AdminRequest

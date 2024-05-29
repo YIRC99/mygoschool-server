@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 违规词配置
  * @Version v1.0
  * @DateTime 2024/3/24 20:08
  * @Description 违规词配置
