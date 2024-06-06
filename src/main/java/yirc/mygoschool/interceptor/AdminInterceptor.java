@@ -52,7 +52,7 @@ public class AdminInterceptor implements HandlerInterceptor {
                     // 如果jwt不匹配直接返回 权限不足无法调用
                     log.info("IP为:{} 访问: {}地址 权限不足 jwt value 不一致", getIP(request),request.getRequestURL());
                     response.setContentType("application/json;charset=UTF-8");
-                    response.getWriter().write(JSON.toJSONString(Result.error("权限不足,无法调用", ResultCode.TOKEN_ERROR)));
+                    response.getWriter().write(JSON.toJSONString(Result.error("已存在登录的管理员, 请检查登录记录", ResultCode.TOKEN_ERROR)));
                     return false;
                 }
             }

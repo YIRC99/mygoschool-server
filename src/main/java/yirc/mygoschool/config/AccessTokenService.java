@@ -55,7 +55,7 @@ public class AccessTokenService {
         try{
             initRedis();
         }catch (IOException | InterruptedException e){
-            throw new CustomException("redis 启动失败");
+            throw new CustomException("redis 启动失败: " + e.getMessage());
         }
         try{
             refreshAccessToken();
@@ -85,7 +85,8 @@ public class AccessTokenService {
             Process start = redisProcess.start();
             // 设置10秒启动时间 超时则认为启动失败
             boolean started = start.waitFor(10, TimeUnit.SECONDS);
-            if (started) {
+            // 这里改一下 一直
+            if (start.isAlive()) {
                 log.info("自动启动本机redis");
             } else {
                 throw new CustomException("无法启动 Redis");

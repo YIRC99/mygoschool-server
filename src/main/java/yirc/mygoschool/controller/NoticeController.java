@@ -33,8 +33,8 @@ public class NoticeController {
     public Result list() {
         LambdaQueryWrapper<Notice> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Notice::getIsdelete,0)
-                .orderByDesc(Notice::getSort)
-                .orderByDesc(Notice::getId);
+                .orderByAsc(Notice::getSort)
+                .orderByAsc(Notice::getId);
         return Result.success(noticeService.list(wrapper));
     }
 
