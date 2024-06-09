@@ -64,7 +64,8 @@ public class UserinfoController {
         String username = map.get("username");
         String password = map.get("password");
         if(Objects.isNull(password) || Objects.isNull(username)) return Result.error("账号或密码错误");
-        Userinfo byId = userinfoService.getById(2022020926);
+        Userinfo byId = userinfoService.getById(123456123456L);
+        if(Objects.isNull(byId))return Result.error("登录用户账号不存在!");
         boolean flag = myUtil.checkPassword(password, byId.getAvatar());
         if(!flag) return Result.error("账号或密码错误");
         //  登录成功之后 成一个JWT令牌 令牌时间30分钟过期 不纯在任何地方
@@ -156,6 +157,7 @@ public class UserinfoController {
 
     @PostMapping("/byopenid")
     public Result getByOpenId(@RequestBody Userinfo user) {
+        // TODO 这里有问题 前端不管点击谁的头像都会进入同一个主页
         LambdaQueryWrapper<Userinfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Userinfo::getOpenid, user.getOpenid());
         Userinfo userinfo = userinfoService.getOne(wrapper);
