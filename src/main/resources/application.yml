@@ -71,4 +71,4 @@ yirc99:
   JWTKey: ENC(2DuwwqMyDABJNAw5tuDom9pOnp/HaEz6PQ51TnwGwJRE6tT8PvAD7lKmA6WZzo+wBwSAzXNOBFZBLR+iRkwqy1Q/lc4PggQZSSM1OKXd5Wg7bktwTF73qPfbU6+qDBxl)
   Expire: ENC(81esOfK/f7p+OpnfrOl0TBbClp9CRCRB) #JWT 的配置有效时间为 100年
   Template:
-    id: R0HVPNJRywpmvaA5xO6YWFfjLdGqcjWPB0-rqRkmkbk
+    id: R0HVPNJRywpmvaA5xO6YWFfjLdGqcjWPB0-rqRkmkbk # 微信消息推送的模板ID

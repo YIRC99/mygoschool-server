@@ -64,7 +64,7 @@ public class UserinfoController {
         String username = map.get("username");
         String password = map.get("password");
         if(Objects.isNull(password) || Objects.isNull(username)) return Result.error("账号或密码错误");
-        Userinfo byId = userinfoService.getById(123456123456L);
+        Userinfo byId = userinfoService.getById(2022020926);
         if(Objects.isNull(byId))return Result.error("登录用户账号不存在!");
         boolean flag = myUtil.checkPassword(password, byId.getAvatar());
         if(!flag) return Result.error("账号或密码错误");
@@ -152,16 +152,17 @@ public class UserinfoController {
     public Result getByUserId(@RequestBody Userinfo user) {
         Userinfo userinfo = userinfoService.getById(user);
         userinfo.setUsername(sensitiveWordBs.replace(userinfo.getUsername()));
+        userinfo.setToken("");
         return Result.success(userinfo);
     }
 
     @PostMapping("/byopenid")
     public Result getByOpenId(@RequestBody Userinfo user) {
-        // TODO 这里有问题 前端不管点击谁的头像都会进入同一个主页
         LambdaQueryWrapper<Userinfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Userinfo::getOpenid, user.getOpenid());
         Userinfo userinfo = userinfoService.getOne(wrapper);
         userinfo.setUsername(sensitiveWordBs.replace(userinfo.getUsername()));
+        userinfo.setToken("");
         return Result.success(userinfo);
     }
 
