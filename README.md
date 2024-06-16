@@ -4,7 +4,8 @@
 
 简洁的干净的UI设计, 完善的功能, 以及自动的内容审核,完善的前后和管理端, 微信模板通知,在便利的同时也可以用来学习
 
-<img src="C:\Users\一见如初\Desktop\logo.jpg" alt="logo" style="zoom: 25%;" />
+![输入图片说明](src/main/resources/static/default/logo.jpg)
+
 
 ## 小程序端介绍
 
@@ -51,5 +52,5 @@ git clone https://gitee.com/yirc99/mygoschool-server.git
 
 ## 项目图片
 
-<img src="C:\Users\一见如初\AppData\Roaming\Typora\typora-user-images\image-20240609173748552.png" alt="image-20240609173748552" style="zoom: 50%;" />
+![输入图片说明](src/main/resources/static/default/11.png)![输入图片说明](src/main/resources/static/22.png)
 
