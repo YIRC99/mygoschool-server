@@ -12,6 +12,10 @@
 
 小程序端整体使用`uniapp`开发`vue2`框架  数据解密使用`crypto-js` 组件基本使用`uv-ui` 完成
 
+附上小程序端 开源地址
+
+[Gitee](https://gitee.com/yirc99/mygoshool)  https://gitee.com/yirc99/mygoshool
+
 ### 安装启动须知
 
 ```
@@ -26,6 +30,10 @@ npm install
 图片自动检测使用雅虎开源的NSFW模型`opennsfw2`配合python一起调用  数据加密采用AES加密CBC模式 还有`mybatis plus`
 
 python版本为` 3.10.11`  
+
+附上服务端开源地址
+
+https://gitee.com/yirc99/mygoschool-server
 
 ### 安装启动须知
 
