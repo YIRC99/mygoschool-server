@@ -12,6 +12,7 @@ import yirc.mygoschool.service.MyimgService;
 import yirc.mygoschool.service.MynsfwService;
 
 import java.io.*;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -65,13 +66,24 @@ public class MyNSFW implements CommandLineRunner {
             reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
             log.info("python 启动成功");
         } catch (Exception e) {
-            try {
-                reader.close();
-                out.close();
-            } catch (IOException ex) {
-                throw new CustomException("启动python时出现错误 关闭python流时报错了" + ex.getMessage());
-            }
+            closeResources();
+            log.error("启动python时出现错误: {}" , e.getMessage());
             throw new CustomException("python 启动失败 " + e.getMessage());
+        }
+    }
+
+    // 关闭资源
+    private void closeResources() {
+        try {
+            if (reader != null) {
+                reader.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+        } catch (IOException ex) {
+            log.error("关闭python流时报错了: {}", ex.getMessage());
+            throw new CustomException("启动python时出现错误 关闭python流时报错了" + ex.getMessage());
         }
     }
 

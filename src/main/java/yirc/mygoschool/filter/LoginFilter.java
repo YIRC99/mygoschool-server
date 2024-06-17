@@ -82,16 +82,19 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         try {
             claims = myUtil.parseJWT(token);
         }catch (SignatureException e) {
+            log.error("{} 请求的token 签名无效 请重新登录, token: {}",request.getRequestURL(),token);
             // 解析失败
             response.getWriter().write(JSON.toJSONString(
                     Result.error("token 签名无效 请重新登录", ResultCode.TOKEN_ERROR)));
             return;
         } catch (ExpiredJwtException e) {
+            log.error("{} 请求的token 令牌超时 请重新登录, token: {}",request.getRequestURL(),token);
             // 解析失败
             response.getWriter().write(JSON.toJSONString(
                     Result.error("token jwt令牌超时 请重新登录", ResultCode.TOKEN_TIMEOUT)));
             return;
         } catch (Exception e) {
+            log.error("{} 请求的token 解析失败 请重新登录, token: {}",request.getRequestURL(),token);
             // 解析失败
             response.getWriter().write(JSON.toJSONString(
                     Result.error("token 解析失败 请重新登录", ResultCode.TOKEN_ERROR)));

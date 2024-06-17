@@ -1,6 +1,8 @@
 server:
   port: 33088
 spring:
+  profiles:
+    active: dev # 默认激活的配置文件，可以根据需要修改
   main:
     banner-mode: off
   datasource:
@@ -63,8 +65,8 @@ yirc99:
   filePath: /src/main/resources/static/
 #  pythonExePath: /usr/bin/python310
 #  pythonPath: /home/yirc99/my-success/testWhile.py
-  pythonExePath: F:/GitHubCode/isNSFW/my-success_1/.venv10/Scripts/python.exe
-  pythonPath: F:/GitHubCode/isNSFW/my-success_1/testWhile.py
+#  pythonExePath: F:/GitHubCode/isNSFW/my-success_1/.venv10/Scripts/python.exe
+#  pythonPath: F:/GitHubCode/isNSFW/my-success_1/testWhile.py
   NSFWScore: 0.25 # 超过这个值，则认为图片可能为NSFW图片保存
   NSFWMaxScore: 0.75 # 超过这个值，则认为图片一定是NSFW图片 直接替换为违规图片
   AESKey: ENC(uN0jRR1T19o/yBcu6TR7wVLsVL94XIsJ2tKXVJyU+ITnP4pYwHH2UOHn3JMThIAQ) #AES 密钥要求必须为32位
