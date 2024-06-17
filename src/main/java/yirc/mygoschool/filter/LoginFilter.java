@@ -42,7 +42,7 @@ public class LoginFilter extends GenericFilterBean implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         response.setContentType("application/json;charset=UTF-8");// 设置返回值字符编码
-        log.info("请求的路径为: {}", request.getRequestURL());
+//        log.info("请求的路径为: {}", request.getRequestURL());
         // 配置不需要验证token的请求
         String[] urls = new String[]{
                 "/user/login",

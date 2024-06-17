@@ -4,7 +4,7 @@
 
 简洁的干净的UI设计, 完善的功能, 以及自动的内容审核,完善的前后和管理端, 微信模板通知,在便利的同时也可以用来学习
 
-![输入图片说明](src/main/resources/static/default/logo.jpg)
+![输入图片说明](https://yirc99.cn/api/common/download?path=default&name=logo.jpg)
 
 
 ## 小程序端介绍
@@ -30,7 +30,9 @@ npm install
 
 图片自动检测使用雅虎开源的NSFW模型`opennsfw2`配合python一起调用  数据加密采用AES加密CBC模式 还有`mybatis plus`
 
-python版本为` 3.10.11`  
+python版本为` 3.10.11`
+
+### 其中python的代码我放在java的resource中了 就叫testWhile.py 使用的时候去yml文件中改一下路径即可
 
 附上服务端开源地址
 
@@ -52,5 +54,5 @@ git clone https://gitee.com/yirc99/mygoschool-server.git
 
 ## 项目图片
 
-![输入图片说明](src/main/resources/static/default/11.png)![输入图片说明](src/main/resources/static/22.png)
+![输入图片说明](https://yirc99.cn/api/common/download?path=default&name=jiesao1.png)![输入图片说明](https://yirc99.cn/api/common/download?path=default&name=jiesao2.png)
 
