@@ -119,12 +119,62 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
 
 
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.9.28</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>build-native</id>
+                        <goals>
+                            <goal>compile-no-fork</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                    <execution>
+                        <id>test-native</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>test</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- 镜像名称 -->
+                    <imageName>mygoSchool</imageName>
+                    <!-- 启动类 -->
+                    <mainClass>yirc.mygoschool.MygoSchoolApplication</mainClass>
+                    <buildArgs>
+                        <buildArg>--verbose</buildArg>
+                    </buildArgs>
+                    <skipNativeTests>true</skipNativeTests>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

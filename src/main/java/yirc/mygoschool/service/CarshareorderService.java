@@ -22,7 +22,7 @@ public interface CarshareorderService extends IService<Carshareorder> {
     boolean SaveWeChatImg(Carshareorder carshareorder);
 
 
-    Page<CarshareorderDto> listByPage(PageInfoCar pageInfo);
+    Page<CarshareorderDto> listByPage(PageInfoCar pageInfo, boolean isAdmin);
 
 
     Carshareorder selectForUpdate(Long orderid);

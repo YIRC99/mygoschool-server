@@ -8,8 +8,8 @@ spring:
   datasource:
     url: ENC(Qyli4hKrqFUV1lnl7868PXnRc54W7f53MlqgLJR2DrFJNf6GBdvkPQfdHl6tpeQ89eEVpO1uif9SGDFK5lig4TeyaXT8FPMeYXO+nNj3x7xKK8SAgaut+iVsnoPBhz1ARGMC3OwgaJRA0ADKYLoHuXTDbV36KINUnwq3/x63z9kd25JNhD/h4qCa7kI0s7Qpb376gIHO38QMI7JM8b6lFEE4Bt95pzKepwiGSXwQ7+wzjGtx6/XrGYRh9Hfeqb3cqxfMGAi1GeZ/vdKgS1cVG7TjhXuUkP2n6fRpPrFIGSb3jwIeO/OcfCAc/ORiD6fp)
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ENC(VkOzclWIxzIYGC9tkWkdnQ==)
-    password: ENC(g6iW3UD6nLt+aK4Q3S3OkDjM1OBT9WSL)
+    username: root
+    password: 123456
   threads:
     virtual:
       enabled: true # 开启虚拟线程

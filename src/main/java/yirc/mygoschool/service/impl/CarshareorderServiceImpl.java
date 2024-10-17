@@ -78,14 +78,15 @@ public class CarshareorderServiceImpl extends ServiceImpl<CarshareorderMapper, C
     }
 
     @Override
-    public Page<CarshareorderDto> listByPage(PageInfoCar pageInfo) {
+    public Page<CarshareorderDto> listByPage(PageInfoCar pageInfo,boolean isAdmin) {
         Page<CarshareorderDto> pageDto = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
 
         Page<Carshareorder> page = new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize());
         LambdaQueryWrapper<Carshareorder> wrapper = new LambdaQueryWrapper<>();
         // 公共条件 没有删除 没有人接受 没有超时 开始时间降序
         wrapper.eq(Carshareorder::getIsDelete, 0);
-        wrapper.isNull(Carshareorder::getReceiveuserid);
+        if(!isAdmin) // 不是管理员的话就不能查看已经结束的拼车信息
+            wrapper.isNull(Carshareorder::getReceiveuserid);
         wrapper.gt(Carshareorder::getStartdatetime, LocalDateTime.now());
         wrapper.orderByDesc(Carshareorder::getStartdatetime);
 

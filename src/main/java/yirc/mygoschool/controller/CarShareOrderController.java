@@ -90,9 +90,24 @@ public class CarShareOrderController {
             throw new CustomException("分页参数错误");
         }
         //分页查询全部拼车 附带筛选
-        Page<CarshareorderDto> orderDtos = carshareorderService.listByPage(pageInfo);
+        Page<CarshareorderDto> orderDtos = carshareorderService.listByPage(pageInfo,false);
         return Result.success(orderDtos);
     }
+
+    @PostMapping("/admin/page")
+    @AdminRequest
+    public Result adminList(@RequestBody PageInfoCar pageInfo) {
+        log.info("分页查询的参数为: {} {} {} {}", pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getPageDate(), pageInfo.getStartAddName());
+        if (pageInfo.getPageNum() == null || pageInfo.getPageNum() < 1
+                || pageInfo.getPageSize() == null || pageInfo.getPageSize() < 1) {
+            throw new CustomException("分页参数错误");
+        }
+        //分页查询全部拼车 附带筛选
+        Page<CarshareorderDto> orderDtos = carshareorderService.listByPage(pageInfo,true);
+        return Result.success(orderDtos);
+    }
+
+
 
     @PostMapping("/receive")
     @Transactional

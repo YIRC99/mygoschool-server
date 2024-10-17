@@ -3,6 +3,7 @@ package yirc.mygoschool.Dto;
 import lombok.Data;
 import yirc.mygoschool.domain.PageInfo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -12,7 +13,7 @@ import java.time.LocalDate;
  * @Author 一见如初
  */
 @Data
-public class PageInfoShop extends PageInfo {
+public class PageInfoShop extends PageInfo  implements Serializable {
     private Integer[] addressCodeArr;
     private String[] target;
 }

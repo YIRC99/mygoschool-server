@@ -15,7 +15,7 @@ import java.time.LocalTime;
 
 
 @Data
-public class CarshareorderDto extends Carshareorder {
+public class CarshareorderDto extends Carshareorder implements Serializable  {
     private Userinfo createUserInfo;
     private Userinfo receiveUserInfo;
 }

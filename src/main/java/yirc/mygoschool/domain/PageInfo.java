@@ -1,7 +1,9 @@
 package yirc.mygoschool.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -11,7 +13,10 @@ import java.time.LocalDate;
  * @Author 一见如初
  */
 @Data
-public class PageInfo {
+public class PageInfo implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+
     private Integer pageNum;
     private Integer pageSize;
 }

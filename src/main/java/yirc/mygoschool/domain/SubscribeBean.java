@@ -1,6 +1,9 @@
 package yirc.mygoschool.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @Version v1.0
@@ -9,7 +12,10 @@ import lombok.Data;
  * @Author 一见如初
  */
 @Data
-public class SubscribeBean {
+public class SubscribeBean implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+
     /** 接收者（用户）的 openid */
     private String touser;
     /** 所需下发的订阅模板id */

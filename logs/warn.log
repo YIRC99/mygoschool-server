@@ -1,0 +1,1 @@
+2024-10-17 20:05:52 WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Mvc [pattern='/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.

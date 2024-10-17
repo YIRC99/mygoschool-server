@@ -1,0 +1,88 @@
+2024-06-17 17:25:30 ERROR yirc.mygoschool.filter.LoginFilter - http://127.0.0.1:33088/user/update 请求的token 解析失败 请重新登录, token: 1233121
+2024-06-17 17:46:00 ERROR o.s.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:789)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$3(SpringApplication.java:770)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:510)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:765)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:330)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1342)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1331)
+	at yirc.mygoschool.MygoSchoolApplication.main(MygoSchoolApplication.java:23)
+Caused by: java.lang.NullPointerException: Cannot invoke "java.io.BufferedReader.close()" because "this.reader" is null
+	at yirc.mygoschool.Utils.MyNSFW.run(MyNSFW.java:69)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:786)
+	... 14 common frames omitted
+2024-06-17 17:47:17 ERROR o.s.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:789)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$3(SpringApplication.java:770)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:510)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:765)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:330)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1342)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1331)
+	at yirc.mygoschool.MygoSchoolApplication.main(MygoSchoolApplication.java:23)
+Caused by: java.lang.NullPointerException: Cannot invoke "java.io.BufferedReader.close()" because "this.reader" is null
+	at yirc.mygoschool.Utils.MyNSFW.run(MyNSFW.java:69)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:786)
+	... 14 common frames omitted
+2024-06-17 17:52:07 ERROR o.s.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:789)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$3(SpringApplication.java:770)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:510)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:765)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:330)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1342)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1331)
+	at yirc.mygoschool.MygoSchoolApplication.main(MygoSchoolApplication.java:23)
+Caused by: java.lang.NullPointerException: Cannot invoke "java.io.BufferedReader.close()" because "this.reader" is null
+	at yirc.mygoschool.Utils.MyNSFW.run(MyNSFW.java:74)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:786)
+	... 14 common frames omitted
+2024-06-17 17:54:04 ERROR yirc.mygoschool.Utils.MyNSFW - 启动python时出现错误: Cannot run program "/usr/bin/python310": CreateProcess error=2, 系统找不到指定的文件。
+2024-06-17 17:54:04 ERROR o.s.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:789)
+	at org.springframework.boot.SpringApplication.lambda$callRunners$3(SpringApplication.java:770)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:510)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:765)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:330)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1342)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1331)
+	at yirc.mygoschool.MygoSchoolApplication.main(MygoSchoolApplication.java:23)
+Caused by: yirc.mygoschool.exception.CustomException: python 启动失败 Cannot run program "/usr/bin/python310": CreateProcess error=2, 系统找不到指定的文件。
+	at yirc.mygoschool.Utils.MyNSFW.run(MyNSFW.java:71)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:786)
+	... 14 common frames omitted
+2024-06-17 17:57:07 ERROR yirc.mygoschool.filter.LoginFilter - http://127.0.0.1:33088/user/update 请求的token 解析失败 请重新登录, token: 1233121
+2024-06-17 17:59:56 ERROR yirc.mygoschool.filter.LoginFilter - http://127.0.0.1:33088/user/update 请求的token 解析失败 请重新登录, token: 1233121

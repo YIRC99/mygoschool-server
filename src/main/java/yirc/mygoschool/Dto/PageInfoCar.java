@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import yirc.mygoschool.domain.PageInfo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -13,7 +14,7 @@ import java.time.LocalDate;
  * @Author 一见如初
  */
 @Data
-public class PageInfoCar extends PageInfo {
+public class PageInfoCar extends PageInfo implements Serializable {
     private String startAddName;
     private LocalDate pageDate;
 

@@ -9,6 +9,9 @@ import yirc.mygoschool.exception.CustomException;
 
 import java.io.Serializable;
 
+/**
+ * @author 一见如初
+ */
 @Data
 @Slf4j
 public class Result implements Serializable {
@@ -21,6 +24,7 @@ public class Result implements Serializable {
     public static void setApplicationContext(ApplicationContext ctx) {
         context = ctx;
     }
+
 
     public static Result success(Object data) {
         MyUtil myUtil = context.getBean(MyUtil.class);

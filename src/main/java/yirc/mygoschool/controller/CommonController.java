@@ -6,6 +6,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -28,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+
 
 @RestController
 @Slf4j
@@ -131,6 +133,7 @@ public class CommonController {
         log.info("path: {}",path);
 
 
+
         log.info("上传文件: {}",file.getOriginalFilename());
         String filename = file.getOriginalFilename();
         assert filename != null;
@@ -169,7 +172,7 @@ public class CommonController {
         }
 
         // 创建线程处理图片
-        VirtualIsNSFW(resultPath);
+//        VirtualIsNSFW(resultPath);
 
         return Result.success(ResultFilename);
     }
@@ -181,13 +184,13 @@ public class CommonController {
     private void VirtualIsNSFW(String resultPath) {
         // 提前取出来因为ThreadLocal切换线程之后报出的值会丢失
         String currentUserId = BaseContext.getCurrentUserId();
-        Thread.ofVirtual().start(() -> {
-            try {
-                myNSFW.isNSFW(resultPath,currentUserId);
-            } catch (IOException e) {
-                throw new CustomException("处理"+resultPath+"图片时出错"+e.getMessage());
-            }
-        });
+//        Thread.ofVirtual().start(() -> {
+//            try {
+//                myNSFW.isNSFW(resultPath,currentUserId);
+//            } catch (IOException e) {
+//                throw new CustomException("处理"+resultPath+"图片时出错"+e.getMessage());
+//            }
+//        });
     }
 
     @PostMapping("/redis")
